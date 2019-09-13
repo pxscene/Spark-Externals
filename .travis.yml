@@ -1,0 +1,28 @@
+matrix:
+  include:
+  - os: linux
+    dist: trusty
+    sudo: required
+    addons:
+      apt:
+        sources:
+        - ubuntu-toolchain-r-test
+        packages:
+        - gcc-6
+        - g++-6
+    env:
+      - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+  - os: osx
+    osx_image: xcode9.4
+language: c++
+before_install:
+- eval "${MATRIX_EVAL}"
+- if ( [ "$TRAVIS_EVENT_TYPE" = "push" ] || [ "$TRAVIS_EVENT_TYPE" = "pull_request" ] ) && [ -z "${TRAVIS_TAG}" ] && [ "$TRAVIS_OS_NAME" = "osx" ] ; then export PATH=/usr/local/opt/ccache/libexec:$PATH ; fi
+- if ( [ "$TRAVIS_EVENT_TYPE" = "push" ] || [ "$TRAVIS_EVENT_TYPE" = "pull_request" ] ) && [ -z "${TRAVIS_TAG}" ] && [ "$TRAVIS_OS_NAME" = "linux" ] ; then export PATH=/usr/lib/ccache:$PATH ; fi
+- gcc -v && g++ -v 
+- ./ci/before_install.sh
+install:
+- ./ci/install.sh
+script:
+- ./ci/savelibs.sh
+cache: ccache
