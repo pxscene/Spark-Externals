@@ -97,7 +97,10 @@ then
   fi
 
   cd ..
-  rm node
+  if [ -e "node" ]
+  then
+    rm -rf node
+  fi
   ln -sf "libnode-v${NODE_VER}" node
 fi
 #---------
