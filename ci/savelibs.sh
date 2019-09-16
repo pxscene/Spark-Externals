@@ -37,6 +37,7 @@ else
 fi
 cp ${SPARK_WEBGL_DIR}/gles2.node ${EXT_INSTALL_PATH}/.
 
+env
 #perform git commit
 git checkout $TRAVIS_BRANCH
 REPO_USER_NAME=`echo $TRAVIS_REPO_SLUG | cut -d'/' -f 1`
