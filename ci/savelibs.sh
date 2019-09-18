@@ -54,10 +54,11 @@ REPO_USER_NAME=`echo $TRAVIS_REPO_SLUG | cut -d'/' -f 1`
 REPO_NAME=`echo $TRAVIS_REPO_SLUG | cut -d'/' -f 2`
 git pull https://$REPO_USER_NAME:$GH_TOKEN@github.com/$REPO_USER_NAME/$REPO_NAME.git master
 git add ${EXT_INSTALL_PATH}
-git commit -m "update ${TRAVIS_OS_NAME} externals [skip ci]"
-if [ "$TRAVIS_PULL_REQUEST" = "true" ]
+if [ "$TRAVIS_PULL_REQUEST" != "false" ]
 then
+  git status .
   exit 0;
 fi
+git commit -m "update ${TRAVIS_OS_NAME} externals [skip ci]"
 git push --repo="https://$REPO_USER_NAME:$GH_TOKEN@github.com/$REPO_USER_NAME/$REPO_NAME.git" 
 checkError $? "unable to commit data to repo" "" "check the credentials"
