@@ -28,7 +28,7 @@ $TRAVIS_BUILD_DIR/ci/monitor.sh &
 if [ "$TRAVIS_OS_NAME" = "linux" ] ;
 then
   travis_retry sudo apt-get update
-  travis_retry sudo apt-get install git libglew-dev freeglut3 freeglut3-dev zlib1g-dev g++ nasm autoconf libyaml-dev quilt libuv-dev xmlto
+  travis_retry sudo apt-get install git libglew-dev freeglut3 freeglut3-dev zlib1g-dev g++ nasm autoconf libyaml-dev quilt libuv-dev xmlto yasm bison flex python
 fi
 
 if [ "$TRAVIS_OS_NAME" = "osx" ] ;
