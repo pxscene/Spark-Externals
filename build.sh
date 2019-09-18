@@ -1,5 +1,4 @@
-#!/bin/bash
-set -e
+et -e
 # Any subsequent(*) commands which fail will cause the shell script to exit immediately
 
 banner() {
