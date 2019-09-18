@@ -351,33 +351,33 @@ fi
 #--------
 #-------- gst-libav
 
-#if [ ! -e $EXT_INSTALL_PATH/lib/gstreamer-1.0/libgstlibav.la ]
-#then
-#  banner "gst-libav"
-#
-#  ./gst-libav/build.sh
-#fi
+if [ ! -e $EXT_INSTALL_PATH/lib/gstreamer-1.0/libgstlibav.la ]
+then
+  banner "gst-libav"
 
-##--------
-#
-##-------- aampabr
-#
-#if [ ! -e $EXT_INSTALL_PATH/lib/libabr.$LIBEXTN ]
-#then
-#  banner "aampabr"
-#
-#  ./aampabr/build.sh
-#fi
-#
-##--------
-#
-##-------- aamp
-#
-#if [ ! -e $EXT_INSTALL_PATH/lib/libaamp.$LIBEXTN ]
-#then
-#  banner "aamp"
-#
-#  ./aamp/build.sh
-#fi
+  ./gst-libav/build.sh
+fi
+
+#--------
+
+#-------- aampabr
+
+if [ ! -e $EXT_INSTALL_PATH/lib/libabr.$LIBEXTN ]
+then
+  banner "aampabr"
+
+  ./aampabr/build.sh
+fi
+
+#--------
+
+#-------- aamp
+
+if [ ! -e $EXT_INSTALL_PATH/lib/libaamp.$LIBEXTN ]
+then
+  banner "aamp"
+
+  ./aamp/build.sh
+fi
 
 #--------
