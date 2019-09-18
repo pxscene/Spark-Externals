@@ -153,7 +153,6 @@ ln -s ${OPENSSL_DIR} openssl
 #--------graphite2
 
 
-
 if [ ! -e $EXT_INSTALL_PATH/lib/libgraphite2.la ]
 
 then
@@ -467,7 +466,6 @@ cd ..
 #-------- cJSON
 
 
-
 if [ ! -e $EXT_INSTALL_PATH/lib/libcjson.$LIBEXTN ]
 
 then
@@ -505,8 +503,23 @@ fi
 
 
 #--------
+=======
 
 
+#if [ ! -e $EXT_INSTALL_PATH/lib/libcjson.$LIBEXTN ]
+
+#then
+
+#  banner "cJSON"
+
+#
+
+#  ./cJSON/build.sh
+>>>>>>> 68566c2d8139600200c2d4c7653e858aed8b783e
+
+#fi
+
+<<<<<<< HEAD
 
 
 
