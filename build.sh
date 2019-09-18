@@ -300,64 +300,64 @@ fi
 
 #-------- gstreamer-1.16
 
-#if [ ! -e $EXT_INSTALL_PATH/lib/libgstreamer-1.0.la ]
-#then
-#  banner "gstreamer-1.16"
-#
-#  ./gstreamer/build.sh
-#fi
-#
-##--------
-#
-##-------- gst-plugin-base
-#
-#if [ ! -e $EXT_INSTALL_PATH/lib/libgstapp-1.0.la ]
-#then
-#  banner "gst-plugins-base"
-#
-#  ./gst-plugins-base/build.sh
-#fi
-#
-##--------
-##-------- gst-plugin-bad
-#
-#if [ ! -e $EXT_INSTALL_PATH/lib/libgstbadaudio-1.0.la ]
-#then
-#  banner "gst-plugins-bad"
-#
-#  ./gst-plugins-bad/build.sh
-#fi
-#
-##--------
-##-------- gst-plugin-ugly
-#
-#if [ ! -e $EXT_INSTALL_PATH/lib/gstreamer-1.0/libgstx264.la ]
-#then
-#  banner "gst-plugins-ugly"
-#
-#  ./gst-plugins-ugly/build.sh
-#fi
-#
-##--------
-##-------- gst-plugin-good
-#
-#if [ ! -e $EXT_INSTALL_PATH/lib/gstreamer-1.0/libgstavi.la ]
-#then
-#  banner "gst-plugins-good"
-#
-#  ./gst-plugins-good/build.sh
-#fi
+if [ ! -e $EXT_INSTALL_PATH/lib/libgstreamer-1.0.la ]
+then
+  banner "gstreamer-1.16"
+
+  ./gstreamer/build.sh
+fi
 
 #--------
-#-------- gst-libav
 
-#if [ ! -e $EXT_INSTALL_PATH/lib/gstreamer-1.0/libgstlibav.la ]
-#then
-#  banner "gst-libav"
-#
-#  ./gst-libav/build.sh
-#fi
-#
+#-------- gst-plugin-base
+
+if [ ! -e $EXT_INSTALL_PATH/lib/libgstapp-1.0.la ]
+then
+  banner "gst-plugins-base"
+
+  ./gst-plugins-base/build.sh
+fi
+
+#--------
+#-------- gst-plugin-bad
+
+if [ ! -e $EXT_INSTALL_PATH/lib/libgstbadaudio-1.0.la ]
+then
+  banner "gst-plugins-bad"
+
+  ./gst-plugins-bad/build.sh
+fi
+
+#--------
+#-------- gst-plugin-ugly
+
+if [ ! -e $EXT_INSTALL_PATH/lib/gstreamer-1.0/libgstx264.la ]
+then
+  banner "gst-plugins-ugly"
+
+  ./gst-plugins-ugly/build.sh
+fi
+
+#--------
+#-------- gst-plugin-good
+
+if [ ! -e $EXT_INSTALL_PATH/lib/gstreamer-1.0/libgstavi.la ]
+then
+  banner "gst-plugins-good"
+
+  ./gst-plugins-good/build.sh
+fi
+
+--------
+-------- gst-libav
+
+if [ ! -e $EXT_INSTALL_PATH/lib/gstreamer-1.0/libgstlibav.la ]
+then
+  banner "gst-libav"
+
+  ./gst-libav/build.sh
+fi
+
 ##--------
 #
 ##-------- aampabr
