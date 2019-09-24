@@ -1,0 +1,14 @@
+prefix=/home/travis/build/kannanmadanagopalt/Spark-Externals/extlibs
+exec_prefix=/home/travis/build/kannanmadanagopalt/Spark-Externals/extlibs
+libdir=/home/travis/build/kannanmadanagopalt/Spark-Externals/extlibs/lib
+includedir=/home/travis/build/kannanmadanagopalt/Spark-Externals/extlibs/include
+
+Name: FreeType 2
+URL: http://freetype.org
+Description: A free, high-quality, and portable font engine.
+Version: 21.0.15
+Requires:
+Requires.private: zlib
+Libs: -L${libdir} -lfreetype
+Libs.private: -lbz2
+Cflags: -I${includedir}/freetype2
