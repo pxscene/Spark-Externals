@@ -20,8 +20,8 @@ NODE_VER="10.15.3"
 NODE_LIB_DIR="`pwd`/libnode-v${NODE_VER}/out/Release/obj.target"
 OPENSSL_LIB_DIR="`pwd`/openssl-1.0.2o/"
 SPARK_WEBGL_DIR="`pwd`/spark-webgl/build/Release/"
-EXT_LIBS_DIR=`pwd`/extlibs/lib
-EXT_INCLUDE_DIR=`pwd`/extlibs/include
+#EXT_LIBS_DIR=`pwd`/extlibs/lib
+#EXT_INCLUDE_DIR=`pwd`/extlibs/include
 
 #copy to external directories
 EXT_INSTALL_PATH=$PWD/artifacts/${TRAVIS_OS_NAME}
@@ -45,8 +45,8 @@ fi
 cp ${SPARK_WEBGL_DIR}/gles2.node ${NODE_MODULES_PATH}/.
 
 #copy all externals dirs
-cp -R ${EXT_LIBS_DIR}/* ${EXT_INSTALL_LIB_PATH}/.
-cp -R ${EXT_INCLUDE_DIR}/* ${EXT_INSTALL_INCLUDE_PATH}/.
+#cp -R ${EXT_LIBS_DIR}/* ${EXT_INSTALL_LIB_PATH}/.
+#cp -R ${EXT_INCLUDE_DIR}/* ${EXT_INSTALL_INCLUDE_PATH}/.
 
 #perform git commit
 git checkout $TRAVIS_BRANCH

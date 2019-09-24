@@ -23,6 +23,8 @@ before_install:
 - ./ci/before_install.sh
 install:
 - ccache -s
+- ccache -M 5G
+- ccache -s
 - ./ci/install.sh
 script:
 - ./ci/savelibs.sh

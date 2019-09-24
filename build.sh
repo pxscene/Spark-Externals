@@ -4,45 +4,45 @@ set -e
 modified_component_list=()
 
 #build flags
-artifacts_build=0
-aampbr_build=0
-aamp_build=0
-breakpadchrome_build=0
-cjson_build=0
-curl_build=0
-dukluv_build=0
-fontconfig_build=0
-freetype_build=0
-gettext_build=0
-giflib_build=0
-glib_build=0
-graphite2_build=0
-graphite2_build=0
-gstlibav_build=0
-gstpluginsbad_build=0
-gstpluginsbase_build=0
-gstpluginsgood_build=0
-gstpluginsugly_build=0
-gstreamer_build=0
-harfbuzz_build=0
-icu_build=0
-jpeg9a_build=0
-libdash_build=0
-libffi_build=0
-libjpegturbo_build=0
-libnode_build=0
-libpng_build=0
-libxml2_build=0
-nanosvg_build=0
-openssl_build=0
-orc_build=0
-osspuuid_build=0
-pcre_build=0
-sparkwebgl_build=0
-sqliteautoconf_build=0
-uwebsockets_build=0
-xz_build=0
-zlib_build=0
+artifacts_build=1
+aampbr_build=1
+aamp_build=1
+breakpadchrome_build=1
+cjson_build=1
+curl_build=1
+dukluv_build=1
+fontconfig_build=1
+freetype_build=1
+gettext_build=1
+giflib_build=1
+glib_build=1
+graphite2_build=1
+graphite2_build=1
+gstlibav_build=1
+gstpluginsbad_build=1
+gstpluginsbase_build=1
+gstpluginsgood_build=1
+gstpluginsugly_build=1
+gstreamer_build=1
+harfbuzz_build=1
+icu_build=1
+jpeg9a_build=1
+libdash_build=1
+libffi_build=1
+libjpegturbo_build=1
+libnode_build=1
+libpng_build=1
+libxml2_build=1
+nanosvg_build=1
+openssl_build=1
+orc_build=1
+osspuuid_build=1
+pcre_build=1
+sparkwebgl_build=1
+sqliteautoconf_build=1
+uwebsockets_build=1
+xz_build=1
+zlib_build=1
 
 #depends information
 openssl_depends=("openssl")
@@ -53,7 +53,7 @@ graphite2_depends=("graphite2" "freetype")
 pcre_depends=("pcre")
 icu_depends=("icu")
 libffi_depends=("libffi")
-gettext_depends=("gettext")
+gettext_depends=("gettext" "pcre")
 glib_depends=("glib" "libffi")
 giflib_depends=("giflib")
 freetype_depends=("freetype")
@@ -340,7 +340,7 @@ while (( "$#" )); do
 done
 
 EXT_INSTALL_PATH=$PWD/extlibs
-mkdir -p $EXT_INSTALL_PATH
+ln -s $PWD/artifacts/${TRAVIS_OS_NAME} extlibs
 
 make_parallel=3
 
@@ -383,36 +383,27 @@ fi
 
 #--------graphite2
 if [ $graphite2_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/libgraphite2.la ]
-  then
-    banner "graphite2"
-  
-    ./graphite2/build.sh
-  fi
+  banner "graphite2"
+
+  ./graphite2/build.sh
 fi
 
 #--------
 
 #-------- pcre
 if [ $pcre_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/libpcre.la ]
-  then
-    banner "pcre"
-  
-    ./pcre/build.sh
-  fi
+  banner "pcre"
+
+  ./pcre/build.sh
 fi
 #--------
-
+ls -lrt extlibs/lib
 #--------icu
 
 if [ $icu_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/libicudata.$LIBEXTN ]
-  then
-    banner "icu"
-  
-    ./icu/build.sh
-  fi
+  banner "icu"
+
+  ./icu/build.sh
 fi
 
 #--------
@@ -420,12 +411,9 @@ fi
 #-------- libffi
 
 if [ $libffi_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/libffi.la ]
-  then
-    banner "libffi"
-  
-    ./libffi/build.sh
-  fi
+  banner "libffi"
+
+  ./libffi/build.sh
 fi
 
 #--------
@@ -433,12 +421,9 @@ fi
 #--------gettext
 
 if [ $gettext_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/libintl.la ]
-  then
-    banner "gettext"
-  
-    ./gettext/build.sh
-  fi
+  banner "gettext"
+
+  ./gettext/build.sh
 fi
 
 #--------
@@ -446,12 +431,9 @@ fi
 #--------glib
 
 if [ $glib_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/libglib-2.0.la ]
-  then
-    banner "glib"
-  
-    ./glib/build.sh
-  fi
+  banner "glib"
+
+  ./glib/build.sh
 fi
 
 #--------
@@ -459,30 +441,21 @@ fi
 #--------- FT
 
 if [ $freetype_build -eq 1 ]; then
-  if [ ! -e ./ft/objs/.libs/libfreetype.6.dylib ] ||
-     [ "$(uname)" != "Darwin" ]
-  then
-  
-    banner "FT"
-  
-    cd ft
-  
-    LIBPNG_LIBS="-L../png/.libs -lpng16" PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./configure --with-png=no --with-harfbuzz=no --prefix=$EXT_INSTALL_PATH
-    make all "-j${make_parallel}"
-    make install
-    cd ..
-  
-  fi
+  banner "FT"
+
+  cd ft
+
+  LIBPNG_LIBS="-L../png/.libs -lpng16" PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./configure --with-png=no --with-harfbuzz=no --prefix=$EXT_INSTALL_PATH
+  make all "-j${make_parallel}"
+  make install
+  cd ..
 fi
 #---------
 
 if [ $fontconfig_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/libfontconfig.$LIBEXTN ]
-  then
-    banner "Fontconfig"
-  
-    PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./fontconfig/build.sh
-  fi
+  banner "Fontconfig"
+
+  PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./fontconfig/build.sh
 fi
 
 #--------
@@ -490,23 +463,17 @@ fi
 #--------harfbuzz
 
 if [ $harfbuzz_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/libharfbuzz.la ]
-  then
-    banner "harfbuzz"
-  
-    ./harfbuzz/build.sh
-  fi
+  banner "harfbuzz"
+
+  ./harfbuzz/build.sh
 fi
 
 #-------- openssl
 
 if [ $openssl_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/libcrypto.$LIBEXTN ]
-  then
-    banner "openssl"
-  
-    cp -r ${OPENSSL_DIR}/* $EXT_INSTALL_PATH
-  fi
+  banner "openssl"
+
+  cp -r ${OPENSSL_DIR}/* $EXT_INSTALL_PATH
 fi
 
 #--------
@@ -514,37 +481,32 @@ fi
 #--------- LIBNODE
 
 if [ $libnode_build -eq 1 ]; then
-  if [ ! -e "libnode-v${NODE_VER}/libnode.dylib" ] ||
-     [ "$(uname)" != "Darwin" ]
+  banner "NODE"
+  if [ -e "node-v${NODE_VER}_mods.patch" ]
   then
-  
-    banner "NODE"
-    if [ -e "node-v${NODE_VER}_mods.patch" ]
-    then
-      git apply "node-v${NODE_VER}_mods.patch"
-      git apply "openssl_1.0.2_compatibility.patch"
-    fi
-  
-    cd "libnode-v${NODE_VER}"
-    ./configure --shared --shared-openssl --shared-openssl-includes="${OPENSSL_DIR}/include/" --shared-openssl-libpath="${OPENSSL_DIR}/lib"
-    make "-j${make_parallel}"
-  
-    if [ "$(uname)" != "Darwin" ]
-    then
-      ln -sf out/Release/obj.target/libnode.so.* ./
-      ln -sf libnode.so.* libnode.so
-    else
-      ln -sf out/Release/libnode.*.dylib ./
-      ln -sf libnode.*.dylib libnode.dylib
-    fi
-
-    cd ..
-    if [ -e "node" ]
-    then
-      rm -rf node
-    fi
-    ln -sf "libnode-v${NODE_VER}" node
+    git apply "node-v${NODE_VER}_mods.patch"
+    git apply "openssl_1.0.2_compatibility.patch"
   fi
+
+  cd "libnode-v${NODE_VER}"
+  ./configure --shared --shared-openssl --shared-openssl-includes="${OPENSSL_DIR}/include/" --shared-openssl-libpath="${OPENSSL_DIR}/lib"
+  make "-j${make_parallel}"
+
+  if [ "$(uname)" != "Darwin" ]
+  then
+    ln -sf out/Release/obj.target/libnode.so.* ./
+    ln -sf libnode.so.* libnode.so
+  else
+    ln -sf out/Release/libnode.*.dylib ./
+    ln -sf libnode.*.dylib libnode.dylib
+  fi
+
+  cd ..
+  if [ -e "node" ]
+  then
+    rm -rf node
+  fi
+  ln -sf "libnode-v${NODE_VER}" node
 fi
 #---------
 
@@ -557,183 +519,140 @@ if [ $sparkwebgl_build -eq 1 ]; then
   cd ..
 fi
 
-#-------- 
-#if [[ $# -eq 1 ]] && [[ $1 == "SPARK_ENABLE_VIDEO" ]]; then
 #-------- cJSON
 
-if [ $cjson_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/libcjson.$LIBEXTN ]
-  then
-    banner "cJSON"
-  
-    ./cJSON/build.sh
-  fi
-fi
+#if [ $cjson_build -eq 1 ]; then
+#  banner "cJSON"
+#
+#  ./cJSON/build.sh
+#fi
+#
+##--------
+#
+##--------orc
+#
+#if [ $orc_build -eq 1 ]; then
+#  banner "orc"
+#
+#  ./orc/build.sh
+#fi
+#
+##--------
+#
+#
+##--------ossp-uuid
+#
+#if [ $osspuuid_build -eq 1 ]; then
+#  banner "ossp-uuid"
+#
+#  ./ossp-uuid/build.sh
+#fi
+#
+##--------
+#
+##--------libxml2
+#
+#if [ $libxml2_build -eq 1 ]; then
+#  banner "libxml2"
+#
+#  ./libxml2/build.sh
+#fi
+#
+##--------
+#
+##-------- libdash
+#
+#if [ $libdash_build -eq 1 ]; then
+#  banner "libdash"
+#
+#  LD_LIBRARY_PATH="$EXT_INSTALL_PATH/lib:$LD_LIBRARY_PATH" PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./libdash/libdash/build.sh
+#fi
+#
+##--------
+#
+##-------- xz-5.2.2
+#
+#if [ $xz_build -eq 1 ]; then
+#  banner "xz"
+#
+#  ./xz/build.sh
+#fi
+#
+##--------
+#
+##-------- gstreamer-1.16
+#
+#if [ $gstreamer_build -eq 1 ]; then
+#  banner "gstreamer-1.16"
+#
+#  ./gstreamer/build.sh
+#fi
+#
+##--------
+#
+##-------- gst-plugin-base
+#
+#if [ $gstpluginsbase_build -eq 1 ]; then
+#  banner "gst-plugins-base"
+#
+#  ./gst-plugins-base/build.sh
+#fi
+#
+##--------
+##-------- gst-plugin-bad
+#
+#if [ $gstpluginsbad_build -eq 1 ]; then
+#  banner "gst-plugins-bad"
+#
+#  ./gst-plugins-bad/build.sh
+#fi
+#
+##--------
+##-------- gst-plugin-ugly
+#
+#if [ $gstpluginsugly_build -eq 1 ]; then
+#  banner "gst-plugins-ugly"
+#
+#  ./gst-plugins-ugly/build.sh
+#fi
+#
+##--------
+##-------- gst-plugin-good
+#
+#if [ $gstpluginsgood_build -eq 1 ]; then
+#  banner "gst-plugins-good"
+#
+#  ./gst-plugins-good/build.sh
+#fi
+#
+##--------
+##-------- gst-libav
+#
+#if [ $gstlibav_build -eq 1 ]; then
+#  banner "gst-libav"
+#
+#  ./gst-libav/build.sh
+#fi
+#
+##--------
+#
+##-------- aampabr
+#
+#if [ $aampbr_build -eq 1 ]; then
+#  banner "aampabr"
+#
+#  ./aampabr/build.sh
+#fi
+#
+##--------
+#
+##-------- aamp
+#
+#if [ $aamp_build -eq 1 ]; then
+#  banner "aamp"
+#
+#  ./aamp/build.sh
+#fi
 
 #--------
-
-#--------orc
-
-if [ $orc_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/liborc-0.4.la ]
-  then
-    banner "orc"
-  
-    ./orc/build.sh
-  fi
-fi
-
-#--------
-
-
-#--------ossp-uuid
-
-if [ $osspuuid_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/libuuid.la ]
-  then
-    banner "ossp-uuid"
-  
-    ./ossp-uuid/build.sh
-  fi
-fi
-
-#--------
-
-#--------libxml2
-
-if [ $libxml2_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/libxml2.la ]
-  then
-    banner "libxml2"
-  
-    ./libxml2/build.sh
-  fi
-fi
-
-#--------
-
-#-------- libdash
-
-if [ $libdash_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/libdash.$LIBEXTN ]
-  then
-    banner "libdash"
-  
-    LD_LIBRARY_PATH="$EXT_INSTALL_PATH/lib:$LD_LIBRARY_PATH" PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./libdash/libdash/build.sh
-  fi
-fi
-
-#--------
-
-#-------- xz-5.2.2
-
-if [ $xz_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/liblzma.la ]
-  then
-    banner "xz"
-  
-    ./xz/build.sh
-  fi
-fi
-
-#--------
-
-#-------- gstreamer-1.16
-
-if [ $gstreamer_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/libgstreamer-1.0.la ]
-  then
-    banner "gstreamer-1.16"
-  
-    ./gstreamer/build.sh
-  fi
-fi
-
-#--------
-
-#-------- gst-plugin-base
-
-if [ $gstpluginsbase_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/libgstapp-1.0.la ]
-  then
-    banner "gst-plugins-base"
-  
-    ./gst-plugins-base/build.sh
-  fi
-fi
-
-#--------
-#-------- gst-plugin-bad
-
-if [ $gstpluginsbad_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/libgstbadaudio-1.0.la ]
-  then
-    banner "gst-plugins-bad"
-  
-    ./gst-plugins-bad/build.sh
-  fi
-fi
-
-#--------
-#-------- gst-plugin-ugly
-
-if [ $gstpluginsugly_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/gstreamer-1.0/libgstx264.la ]
-  then
-    banner "gst-plugins-ugly"
-  
-    ./gst-plugins-ugly/build.sh
-  fi
-fi
-
-#--------
-#-------- gst-plugin-good
-
-if [ $gstpluginsgood_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/gstreamer-1.0/libgstavi.la ]
-  then
-    banner "gst-plugins-good"
-  
-    ./gst-plugins-good/build.sh
-  fi
-fi
-
-#--------
-#-------- gst-libav
-
-if [ $gstlibav_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/gstreamer-1.0/libgstlibav.la ]
-  then
-    banner "gst-libav"
-  
-    ./gst-libav/build.sh
-  fi
-fi
-
-#--------
-
-#-------- aampabr
-
-if [ $aampbr_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/libabr.$LIBEXTN ]
-  then
-    banner "aampabr"
-  
-    ./aampabr/build.sh
-  fi
-fi
-
-#--------
-
-#-------- aamp
-
-if [ $aamp_build -eq 1 ]; then
-  if [ ! -e $EXT_INSTALL_PATH/lib/libaamp.$LIBEXTN ]
-  then
-    banner "aamp"
-  
-    ./aamp/build.sh
-  fi
-fi
-
-#--------
+rm -rf extlibs
