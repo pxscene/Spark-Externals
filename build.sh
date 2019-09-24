@@ -390,6 +390,7 @@ fi
 
 #--------
 
+ls -lrt extlibs/lib
 #-------- pcre
 if [ $pcre_build -eq 1 ]; then
   banner "pcre"
@@ -397,7 +398,7 @@ if [ $pcre_build -eq 1 ]; then
   ./pcre/build.sh
 fi
 #--------
-ls -lrt extlibs/lib
+
 #--------icu
 
 if [ $icu_build -eq 1 ]; then
