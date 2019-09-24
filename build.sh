@@ -481,45 +481,45 @@ fi
 
 #--------- LIBNODE
 
-if [ $libnode_build -eq 1 ]; then
-  banner "NODE"
-  if [ -e "node-v${NODE_VER}_mods.patch" ]
-  then
-    git apply "node-v${NODE_VER}_mods.patch"
-    git apply "openssl_1.0.2_compatibility.patch"
-  fi
-
-  cd "libnode-v${NODE_VER}"
-  ./configure --shared --shared-openssl --shared-openssl-includes="${OPENSSL_DIR}/include/" --shared-openssl-libpath="${OPENSSL_DIR}/lib"
-  make "-j${make_parallel}"
-
-  if [ "$(uname)" != "Darwin" ]
-  then
-    ln -sf out/Release/obj.target/libnode.so.* ./
-    ln -sf libnode.so.* libnode.so
-  else
-    ln -sf out/Release/libnode.*.dylib ./
-    ln -sf libnode.*.dylib libnode.dylib
-  fi
-
-  cd ..
-  if [ -e "node" ]
-  then
-    rm -rf node
-  fi
-  ln -sf "libnode-v${NODE_VER}" node
-fi
-#---------
-
-#-------- spark-webgl
-if [ $sparkwebgl_build -eq 1 ]; then
-  export NODE_PATH=$NODE_PATH:`pwd`/../node_modules
-  export PATH=`pwd`/node/deps/npm/bin/node-gyp-bin/:`pwd`/node/out/Release:$PATH
-  cd spark-webgl
-  node-gyp rebuild
-  cd ..
-fi
-
+#if [ $libnode_build -eq 1 ]; then
+#  banner "NODE"
+#  if [ -e "node-v${NODE_VER}_mods.patch" ]
+#  then
+#    git apply "node-v${NODE_VER}_mods.patch"
+#    git apply "openssl_1.0.2_compatibility.patch"
+#  fi
+#
+#  cd "libnode-v${NODE_VER}"
+#  ./configure --shared --shared-openssl --shared-openssl-includes="${OPENSSL_DIR}/include/" --shared-openssl-libpath="${OPENSSL_DIR}/lib"
+#  make "-j${make_parallel}"
+#
+#  if [ "$(uname)" != "Darwin" ]
+#  then
+#    ln -sf out/Release/obj.target/libnode.so.* ./
+#    ln -sf libnode.so.* libnode.so
+#  else
+#    ln -sf out/Release/libnode.*.dylib ./
+#    ln -sf libnode.*.dylib libnode.dylib
+#  fi
+#
+#  cd ..
+#  if [ -e "node" ]
+#  then
+#    rm -rf node
+#  fi
+#  ln -sf "libnode-v${NODE_VER}" node
+#fi
+##---------
+#
+##-------- spark-webgl
+#if [ $sparkwebgl_build -eq 1 ]; then
+#  export NODE_PATH=$NODE_PATH:`pwd`/../node_modules
+#  export PATH=`pwd`/node/deps/npm/bin/node-gyp-bin/:`pwd`/node/out/Release:$PATH
+#  cd spark-webgl
+#  node-gyp rebuild
+#  cd ..
+#fi
+#
 #-------- cJSON
 
 #if [ $cjson_build -eq 1 ]; then

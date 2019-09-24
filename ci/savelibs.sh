@@ -36,13 +36,9 @@ if [ "$(uname)" != "Darwin" ]
 then
   cp -R ${NODE_LIB_DIR}/libnode.so.64 ${EXT_INSTALL_LIB_PATH}/.
   cp -R ${NODE_LIB_DIR}/../node ${EXT_INSTALL_BIN_PATH}/.
-  cp -R ${OPENSSL_LIB_DIR}/libcrypto.so.1.0.0 ${EXT_INSTALL_LIB_PATH}/.
-  cp -R ${OPENSSL_LIB_DIR}/libssl.so.1.0.0 ${EXT_INSTALL_LIB_PATH}/.
 else
   cp -R ${NODE_LIB_DIR}/../libnode.*.dylib ${EXT_INSTALL_LIB_PATH}/.
   cp -R ${NODE_LIB_DIR}/../node ${EXT_INSTALL_LIB_PATH}/.
-  cp -R ${OPENSSL_LIB_DIR}/libcrypto.*.dylib ${EXT_INSTALL_LIB_PATH}/.
-  cp -R ${OPENSSL_LIB_DIR}/libssl.*.dylib ${EXT_INSTALL_LIB_PATH}/.
 fi
 cp ${SPARK_WEBGL_DIR}/gles2.node ${NODE_MODULES_PATH}/.
 
