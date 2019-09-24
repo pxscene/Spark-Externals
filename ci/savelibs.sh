@@ -30,6 +30,8 @@ EXT_INSTALL_INCLUDE_PATH=${EXT_INSTALL_PATH}/include
 EXT_INSTALL_BIN_PATH=${EXT_INSTALL_PATH}/bin
 NODE_MODULES_PATH=${EXT_INSTALL_PATH}/node_modules
 
+find $EXT_INSTALL_PATH -name "*.o"|xargs rm -rf
+
 if [ "$(uname)" != "Darwin" ]
 then
   cp -R ${NODE_LIB_DIR}/libnode.so.64 ${EXT_INSTALL_LIB_PATH}/.
