@@ -382,92 +382,92 @@ if [ $openssl_build -eq 1 ]; then
 fi
 
 #--------graphite2
-if [ $graphite2_build -eq 1 ]; then
-  banner "graphite2"
-
-  ./graphite2/build.sh
-fi
-
-#--------
-
-ls -lrt extlibs/lib
-#-------- pcre
-if [ $pcre_build -eq 1 ]; then
-  banner "pcre"
-
-  ./pcre/build.sh
-fi
-#--------
-
-#--------icu
-
-if [ $icu_build -eq 1 ]; then
-  banner "icu"
-
-  ./icu/build.sh
-fi
-
-#--------
-
-#-------- libffi
-
-if [ $libffi_build -eq 1 ]; then
-  banner "libffi"
-
-  ./libffi/build.sh
-fi
-
-#--------
-
-#--------gettext
-
-if [ $gettext_build -eq 1 ]; then
-  banner "gettext"
-
-  ./gettext/build.sh
-fi
-
-#--------
-
-#--------glib
-
-if [ $glib_build -eq 1 ]; then
-  banner "glib"
-
-  ./glib/build.sh
-fi
-
-#--------
-
-#--------- FT
-
-if [ $freetype_build -eq 1 ]; then
-  banner "FT"
-
-  cd ft
-
-  LIBPNG_LIBS="-L../png/.libs -lpng16" PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./configure --with-png=no --with-harfbuzz=no --prefix=$EXT_INSTALL_PATH
-  make all "-j${make_parallel}"
-  make install
-  cd ..
-fi
-#---------
-
-if [ $fontconfig_build -eq 1 ]; then
-  banner "Fontconfig"
-
-  PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./fontconfig/build.sh
-fi
-
-#--------
-
-#--------harfbuzz
-
-if [ $harfbuzz_build -eq 1 ]; then
-  banner "harfbuzz"
-
-  ./harfbuzz/build.sh
-fi
+#if [ $graphite2_build -eq 1 ]; then
+#  banner "graphite2"
+#
+#  ./graphite2/build.sh
+#fi
+#
+##--------
+#
+#ls -lrt extlibs/lib
+##-------- pcre
+#if [ $pcre_build -eq 1 ]; then
+#  banner "pcre"
+#
+#  ./pcre/build.sh
+#fi
+##--------
+#
+##--------icu
+#
+#if [ $icu_build -eq 1 ]; then
+#  banner "icu"
+#
+#  ./icu/build.sh
+#fi
+#
+##--------
+#
+##-------- libffi
+#
+#if [ $libffi_build -eq 1 ]; then
+#  banner "libffi"
+#
+#  ./libffi/build.sh
+#fi
+#
+##--------
+#
+##--------gettext
+#
+#if [ $gettext_build -eq 1 ]; then
+#  banner "gettext"
+#
+#  ./gettext/build.sh
+#fi
+#
+##--------
+#
+##--------glib
+#
+#if [ $glib_build -eq 1 ]; then
+#  banner "glib"
+#
+#  ./glib/build.sh
+#fi
+#
+##--------
+#
+##--------- FT
+#
+#if [ $freetype_build -eq 1 ]; then
+#  banner "FT"
+#
+#  cd ft
+#
+#  LIBPNG_LIBS="-L../png/.libs -lpng16" PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./configure --with-png=no --with-harfbuzz=no --prefix=$EXT_INSTALL_PATH
+#  make all "-j${make_parallel}"
+#  make install
+#  cd ..
+#fi
+##---------
+#
+#if [ $fontconfig_build -eq 1 ]; then
+#  banner "Fontconfig"
+#
+#  PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./fontconfig/build.sh
+#fi
+#
+##--------
+#
+##--------harfbuzz
+#
+#if [ $harfbuzz_build -eq 1 ]; then
+#  banner "harfbuzz"
+#
+#  ./harfbuzz/build.sh
+#fi
 
 #-------- openssl
 
@@ -481,45 +481,45 @@ fi
 
 #--------- LIBNODE
 
-#if [ $libnode_build -eq 1 ]; then
-#  banner "NODE"
-#  if [ -e "node-v${NODE_VER}_mods.patch" ]
-#  then
-#    git apply "node-v${NODE_VER}_mods.patch"
-#    git apply "openssl_1.0.2_compatibility.patch"
-#  fi
-#
-#  cd "libnode-v${NODE_VER}"
-#  ./configure --shared --shared-openssl --shared-openssl-includes="${OPENSSL_DIR}/include/" --shared-openssl-libpath="${OPENSSL_DIR}/lib"
-#  make "-j${make_parallel}"
-#
-#  if [ "$(uname)" != "Darwin" ]
-#  then
-#    ln -sf out/Release/obj.target/libnode.so.* ./
-#    ln -sf libnode.so.* libnode.so
-#  else
-#    ln -sf out/Release/libnode.*.dylib ./
-#    ln -sf libnode.*.dylib libnode.dylib
-#  fi
-#
-#  cd ..
-#  if [ -e "node" ]
-#  then
-#    rm -rf node
-#  fi
-#  ln -sf "libnode-v${NODE_VER}" node
-#fi
-##---------
-#
-##-------- spark-webgl
-#if [ $sparkwebgl_build -eq 1 ]; then
-#  export NODE_PATH=$NODE_PATH:`pwd`/../node_modules
-#  export PATH=`pwd`/node/deps/npm/bin/node-gyp-bin/:`pwd`/node/out/Release:$PATH
-#  cd spark-webgl
-#  node-gyp rebuild
-#  cd ..
-#fi
-#
+if [ $libnode_build -eq 1 ]; then
+  banner "NODE"
+  if [ -e "node-v${NODE_VER}_mods.patch" ]
+  then
+    git apply "node-v${NODE_VER}_mods.patch"
+    git apply "openssl_1.0.2_compatibility.patch"
+  fi
+
+  cd "libnode-v${NODE_VER}"
+  ./configure --shared --shared-openssl --shared-openssl-includes="${OPENSSL_DIR}/include/" --shared-openssl-libpath="${OPENSSL_DIR}/lib"
+  make "-j${make_parallel}"
+
+  if [ "$(uname)" != "Darwin" ]
+  then
+    ln -sf out/Release/obj.target/libnode.so.* ./
+    ln -sf libnode.so.* libnode.so
+  else
+    ln -sf out/Release/libnode.*.dylib ./
+    ln -sf libnode.*.dylib libnode.dylib
+  fi
+
+  cd ..
+  if [ -e "node" ]
+  then
+    rm -rf node
+  fi
+  ln -sf "libnode-v${NODE_VER}" node
+fi
+#---------
+
+#-------- spark-webgl
+if [ $sparkwebgl_build -eq 1 ]; then
+  export NODE_PATH=$NODE_PATH:`pwd`/../node_modules
+  export PATH=`pwd`/node/deps/npm/bin/node-gyp-bin/:`pwd`/node/out/Release:$PATH
+  cd spark-webgl
+  node-gyp rebuild
+  cd ..
+fi
+
 #-------- cJSON
 
 #if [ $cjson_build -eq 1 ]; then
