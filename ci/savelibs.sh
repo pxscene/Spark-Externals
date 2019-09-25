@@ -14,7 +14,7 @@ checkError()
   fi
 }
 
-if [ "$TRAVIS_OS_NAME" = "linux" ] ;
+if [ "$TRAVIS_OS_NAME" = "osx" ] ;
 then
   exit 0;
 fi

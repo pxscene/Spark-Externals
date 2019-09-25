@@ -522,110 +522,110 @@ fi
 
 #-------- cJSON
 
-#if [ $cjson_build -eq 1 ]; then
-#  banner "cJSON"
-#
-#  ./cJSON/build.sh
-#fi
-#
-##--------
-#
-##--------orc
-#
-#if [ $orc_build -eq 1 ]; then
-#  banner "orc"
-#
-#  ./orc/build.sh
-#fi
-#
-##--------
-#
-#
-##--------ossp-uuid
-#
-#if [ $osspuuid_build -eq 1 ]; then
-#  banner "ossp-uuid"
-#
-#  ./ossp-uuid/build.sh
-#fi
-#
-##--------
-#
-##--------libxml2
-#
-#if [ $libxml2_build -eq 1 ]; then
-#  banner "libxml2"
-#
-#  ./libxml2/build.sh
-#fi
-#
-##--------
-#
-##-------- libdash
-#
-#if [ $libdash_build -eq 1 ]; then
-#  banner "libdash"
-#
-#  LD_LIBRARY_PATH="$EXT_INSTALL_PATH/lib:$LD_LIBRARY_PATH" PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./libdash/libdash/build.sh
-#fi
-#
-##--------
-#
-##-------- xz-5.2.2
-#
-#if [ $xz_build -eq 1 ]; then
-#  banner "xz"
-#
-#  ./xz/build.sh
-#fi
-#
-##--------
-#
-##-------- gstreamer-1.16
-#
-#if [ $gstreamer_build -eq 1 ]; then
-#  banner "gstreamer-1.16"
-#
-#  ./gstreamer/build.sh
-#fi
-#
-##--------
-#
-##-------- gst-plugin-base
-#
-#if [ $gstpluginsbase_build -eq 1 ]; then
-#  banner "gst-plugins-base"
-#
-#  ./gst-plugins-base/build.sh
-#fi
-#
-##--------
-##-------- gst-plugin-bad
-#
-#if [ $gstpluginsbad_build -eq 1 ]; then
-#  banner "gst-plugins-bad"
-#
-#  ./gst-plugins-bad/build.sh
-#fi
-#
-##--------
-##-------- gst-plugin-ugly
-#
-#if [ $gstpluginsugly_build -eq 1 ]; then
-#  banner "gst-plugins-ugly"
-#
-#  ./gst-plugins-ugly/build.sh
-#fi
-##--------
-##-------- gst-plugin-good
-#
-#if [ $gstpluginsgood_build -eq 1 ]; then
-#  banner "gst-plugins-good"
-#
-#  ./gst-plugins-good/build.sh
-#fi
-#
-##--------
+if [ $cjson_build -eq 1 ]; then
+  banner "cJSON"
+
+  ./cJSON/build.sh
+fi
+
+#--------
+
+#--------orc
+
+if [ $orc_build -eq 1 ]; then
+  banner "orc"
+
+  ./orc/build.sh
+fi
+
+#--------
+
+
+#--------ossp-uuid
+
+if [ $osspuuid_build -eq 1 ]; then
+  banner "ossp-uuid"
+
+  ./ossp-uuid/build.sh
+fi
+
+#--------
+
+#--------libxml2
+
+if [ $libxml2_build -eq 1 ]; then
+  banner "libxml2"
+
+  ./libxml2/build.sh
+fi
+
+#--------
+
+#-------- libdash
+
+if [ $libdash_build -eq 1 ]; then
+  banner "libdash"
+
+  LD_LIBRARY_PATH="$EXT_INSTALL_PATH/lib:$LD_LIBRARY_PATH" PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./libdash/libdash/build.sh
+fi
+
+#--------
+
+#-------- xz-5.2.2
+
+if [ $xz_build -eq 1 ]; then
+  banner "xz"
+
+  ./xz/build.sh
+fi
+
+#--------
+
+#-------- gstreamer-1.16
+
+if [ $gstreamer_build -eq 1 ]; then
+  banner "gstreamer-1.16"
+
+  ./gstreamer/build.sh
+fi
+
+#--------
+
+#-------- gst-plugin-base
+
+if [ $gstpluginsbase_build -eq 1 ]; then
+  banner "gst-plugins-base"
+
+  ./gst-plugins-base/build.sh
+fi
+
+#--------
+#-------- gst-plugin-bad
+
+if [ $gstpluginsbad_build -eq 1 ]; then
+  banner "gst-plugins-bad"
+
+  ./gst-plugins-bad/build.sh
+fi
+
+#--------
+#-------- gst-plugin-ugly
+
+if [ $gstpluginsugly_build -eq 1 ]; then
+  banner "gst-plugins-ugly"
+
+  ./gst-plugins-ugly/build.sh
+fi
+#--------
+#-------- gst-plugin-good
+
+if [ $gstpluginsgood_build -eq 1 ]; then
+  banner "gst-plugins-good"
+
+  ./gst-plugins-good/build.sh
+fi
+
+#--------
 #-------- gst-libav
 
 if [ $gstlibav_build -eq 1 ]; then
