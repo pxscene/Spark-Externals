@@ -388,6 +388,9 @@ if [ $libpng_build -eq 1 ]; then
   cd ..
 
 fi
+export LD_LIBRARY_PATH="${EXT_INSTALL_PATH}/:$LD_LIBRARY_PATH"
+export DYLD_LIBRARY_PATH="${EXT_INSTALL_PATH}/:$DYLD_LIBRARY_PATH"
+export PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH
 #---------
 
 #--------- JPG
