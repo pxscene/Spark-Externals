@@ -18,17 +18,19 @@ Development
 * libffi: (libffi).             Portable foreign-function interface library.
 
 GNU Gettext Utilities
-* autopoint: (gettext)autopoint Invocation.
-                                Copy gettext infrastructure.
-* envsubst: (gettext)envsubst Invocation.
-                                Expand environment variables.
-* gettextize: (gettext)gettextize Invocation.
-                                Prepare a package for gettext.
-* gettext: (gettext).           GNU gettext utilities.
 * ISO3166: (gettext)Country Codes.
                                 ISO 3166 country codes.
 * ISO639: (gettext)Language Codes.
                                 ISO 639 language codes.
+* xgettext: (gettext)xgettext Invocation.
+                                Extract strings into a PO file.
+* autopoint: (gettext)autopoint Invocation.
+                                Copy gettext infrastructure.
+* envsubst: (gettext)envsubst Invocation.
+                                Expand environment variables.
+* gettext: (gettext).           GNU gettext utilities.
+* gettextize: (gettext)gettextize Invocation.
+                                Prepare a package for gettext.
 * msgattrib: (gettext)msgattrib Invocation.
                                 Select part of a PO file.
 * msgcat: (gettext)msgcat Invocation.
@@ -59,5 +61,3 @@ GNU Gettext Utilities
                                 Unify duplicates for PO file.
 * ngettext: (gettext)ngettext Invocation.
                                 Translate a message with plural.
-* xgettext: (gettext)xgettext Invocation.
-                                Extract strings into a PO file.

@@ -17,7 +17,7 @@ old_library='libgettextlib.a'
 inherited_linker_flags=''
 
 # Libraries that this one depends upon.
-dependency_libs=' -lm -lxml2 -lncurses'
+dependency_libs=' -R/home/travis/build/kannanmadanagopalt/Spark-Externals/extlibs/lib -lm -L/home/travis/build/kannanmadanagopalt/Spark-Externals/extlibs/lib /home/travis/build/kannanmadanagopalt/Spark-Externals/extlibs/lib/libglib-2.0.la /home/travis/build/kannanmadanagopalt/Spark-Externals/extlibs/lib/libpcre.la -lpthread -lxml2 -lncurses'
 
 # Names of additional weak libraries provided by this library
 weak_library_names=''
