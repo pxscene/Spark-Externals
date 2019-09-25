@@ -382,92 +382,92 @@ if [ $openssl_build -eq 1 ]; then
 fi
 
 #--------graphite2
-if [ $graphite2_build -eq 1 ]; then
-  banner "graphite2"
-
-  ./graphite2/build.sh
-fi
-
-#--------
-
-ls -lrt extlibs/lib
-#-------- pcre
-if [ $pcre_build -eq 1 ]; then
-  banner "pcre"
-
-  ./pcre/build.sh
-fi
-#--------
-
-#--------icu
-
-if [ $icu_build -eq 1 ]; then
-  banner "icu"
-
-  ./icu/build.sh
-fi
-
-#--------
-
-#-------- libffi
-
-if [ $libffi_build -eq 1 ]; then
-  banner "libffi"
-
-  ./libffi/build.sh
-fi
-
-#--------
-
-#--------gettext
-
-if [ $gettext_build -eq 1 ]; then
-  banner "gettext"
-
-  ./gettext/build.sh
-fi
-
-#--------
-
-#--------glib
-
-if [ $glib_build -eq 1 ]; then
-  banner "glib"
-
-  ./glib/build.sh
-fi
-
-#--------
-
-#--------- FT
-
-if [ $freetype_build -eq 1 ]; then
-  banner "FT"
-
-  cd ft
-
-  LIBPNG_LIBS="-L../png/.libs -lpng16" PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./configure --with-png=no --with-harfbuzz=no --prefix=$EXT_INSTALL_PATH
-  make all "-j${make_parallel}"
-  make install
-  cd ..
-fi
-#---------
-
-if [ $fontconfig_build -eq 1 ]; then
-  banner "Fontconfig"
-
-  PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./fontconfig/build.sh
-fi
-
-#--------
-
-#--------harfbuzz
-
-if [ $harfbuzz_build -eq 1 ]; then
-  banner "harfbuzz"
-
-  ./harfbuzz/build.sh
-fi
+#if [ $graphite2_build -eq 1 ]; then
+#  banner "graphite2"
+#
+#  ./graphite2/build.sh
+#fi
+#
+##--------
+#
+#ls -lrt extlibs/lib
+##-------- pcre
+#if [ $pcre_build -eq 1 ]; then
+#  banner "pcre"
+#
+#  ./pcre/build.sh
+#fi
+##--------
+#
+##--------icu
+#
+#if [ $icu_build -eq 1 ]; then
+#  banner "icu"
+#
+#  ./icu/build.sh
+#fi
+#
+##--------
+#
+##-------- libffi
+#
+#if [ $libffi_build -eq 1 ]; then
+#  banner "libffi"
+#
+#  ./libffi/build.sh
+#fi
+#
+##--------
+#
+##--------gettext
+#
+#if [ $gettext_build -eq 1 ]; then
+#  banner "gettext"
+#
+#  ./gettext/build.sh
+#fi
+#
+##--------
+#
+##--------glib
+#
+#if [ $glib_build -eq 1 ]; then
+#  banner "glib"
+#
+#  ./glib/build.sh
+#fi
+#
+##--------
+#
+##--------- FT
+#
+#if [ $freetype_build -eq 1 ]; then
+#  banner "FT"
+#
+#  cd ft
+#
+#  LIBPNG_LIBS="-L../png/.libs -lpng16" PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./configure --with-png=no --with-harfbuzz=no --prefix=$EXT_INSTALL_PATH
+#  make all "-j${make_parallel}"
+#  make install
+#  cd ..
+#fi
+##---------
+#
+#if [ $fontconfig_build -eq 1 ]; then
+#  banner "Fontconfig"
+#
+#  PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./fontconfig/build.sh
+#fi
+#
+##--------
+#
+##--------harfbuzz
+#
+#if [ $harfbuzz_build -eq 1 ]; then
+#  banner "harfbuzz"
+#
+#  ./harfbuzz/build.sh
+#fi
 
 #-------- openssl
 
@@ -519,112 +519,112 @@ fi
 #  node-gyp rebuild
 #  cd ..
 #fi
-#
+
 #-------- cJSON
 
-#if [ $cjson_build -eq 1 ]; then
-#  banner "cJSON"
-#
-#  ./cJSON/build.sh
-#fi
-#
-##--------
-#
-##--------orc
-#
-#if [ $orc_build -eq 1 ]; then
-#  banner "orc"
-#
-#  ./orc/build.sh
-#fi
-#
-##--------
-#
-#
-##--------ossp-uuid
-#
-#if [ $osspuuid_build -eq 1 ]; then
-#  banner "ossp-uuid"
-#
-#  ./ossp-uuid/build.sh
-#fi
-#
-##--------
-#
-##--------libxml2
-#
-#if [ $libxml2_build -eq 1 ]; then
-#  banner "libxml2"
-#
-#  ./libxml2/build.sh
-#fi
-#
-##--------
-#
-##-------- libdash
-#
-#if [ $libdash_build -eq 1 ]; then
-#  banner "libdash"
-#
-#  LD_LIBRARY_PATH="$EXT_INSTALL_PATH/lib:$LD_LIBRARY_PATH" PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./libdash/libdash/build.sh
-#fi
-#
-##--------
-#
-##-------- xz-5.2.2
-#
-#if [ $xz_build -eq 1 ]; then
-#  banner "xz"
-#
-#  ./xz/build.sh
-#fi
-#
-##--------
-#
-##-------- gstreamer-1.16
-#
-#if [ $gstreamer_build -eq 1 ]; then
-#  banner "gstreamer-1.16"
-#
-#  ./gstreamer/build.sh
-#fi
-#
-##--------
-#
-##-------- gst-plugin-base
-#
-#if [ $gstpluginsbase_build -eq 1 ]; then
-#  banner "gst-plugins-base"
-#
-#  ./gst-plugins-base/build.sh
-#fi
-#
-##--------
-##-------- gst-plugin-bad
-#
-#if [ $gstpluginsbad_build -eq 1 ]; then
-#  banner "gst-plugins-bad"
-#
-#  ./gst-plugins-bad/build.sh
-#fi
-#
-##--------
-##-------- gst-plugin-ugly
-#
-#if [ $gstpluginsugly_build -eq 1 ]; then
-#  banner "gst-plugins-ugly"
-#
-#  ./gst-plugins-ugly/build.sh
-#fi
-#
-##--------
-##-------- gst-plugin-good
-#
-#if [ $gstpluginsgood_build -eq 1 ]; then
-#  banner "gst-plugins-good"
-#
-#  ./gst-plugins-good/build.sh
-#fi
+if [ $cjson_build -eq 1 ]; then
+  banner "cJSON"
+
+  ./cJSON/build.sh
+fi
+
+#--------
+
+#--------orc
+
+if [ $orc_build -eq 1 ]; then
+  banner "orc"
+
+  ./orc/build.sh
+fi
+
+#--------
+
+
+#--------ossp-uuid
+
+if [ $osspuuid_build -eq 1 ]; then
+  banner "ossp-uuid"
+
+  ./ossp-uuid/build.sh
+fi
+
+#--------
+
+#--------libxml2
+
+if [ $libxml2_build -eq 1 ]; then
+  banner "libxml2"
+
+  ./libxml2/build.sh
+fi
+
+#--------
+
+#-------- libdash
+
+if [ $libdash_build -eq 1 ]; then
+  banner "libdash"
+
+  LD_LIBRARY_PATH="$EXT_INSTALL_PATH/lib:$LD_LIBRARY_PATH" PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./libdash/libdash/build.sh
+fi
+
+#--------
+
+#-------- xz-5.2.2
+
+if [ $xz_build -eq 1 ]; then
+  banner "xz"
+
+  ./xz/build.sh
+fi
+
+#--------
+
+#-------- gstreamer-1.16
+
+if [ $gstreamer_build -eq 1 ]; then
+  banner "gstreamer-1.16"
+
+  ./gstreamer/build.sh
+fi
+
+#--------
+
+#-------- gst-plugin-base
+
+if [ $gstpluginsbase_build -eq 1 ]; then
+  banner "gst-plugins-base"
+
+  ./gst-plugins-base/build.sh
+fi
+
+#--------
+#-------- gst-plugin-bad
+
+if [ $gstpluginsbad_build -eq 1 ]; then
+  banner "gst-plugins-bad"
+
+  ./gst-plugins-bad/build.sh
+fi
+
+#--------
+#-------- gst-plugin-ugly
+
+if [ $gstpluginsugly_build -eq 1 ]; then
+  banner "gst-plugins-ugly"
+
+  ./gst-plugins-ugly/build.sh
+fi
+
+#--------
+#-------- gst-plugin-good
+
+if [ $gstpluginsgood_build -eq 1 ]; then
+  banner "gst-plugins-good"
+
+  ./gst-plugins-good/build.sh
+fi
 #
 ##--------
 ##-------- gst-libav
