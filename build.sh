@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+export CCACHE_RECACHE=1
 # Any subsequent(*) commands which fail will cause the shell script to exit immediately
 modified_component_list=()
 
@@ -16,7 +17,6 @@ freetype_build=1
 gettext_build=1
 giflib_build=1
 glib_build=1
-graphite2_build=1
 graphite2_build=1
 gstlibav_build=1
 gstpluginsbad_build=1
@@ -657,3 +657,4 @@ fi
 
 #--------
 rm -rf extlibs
+export CCACHE_RECACHE=0

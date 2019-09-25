@@ -22,8 +22,6 @@ checkError()
 
 echo "******************** Building externals ********************" > $BUILDLOGS
 cd $TRAVIS_BUILD_DIR
-export CCACHE_RECACHE=1
 ./build.sh>>$BUILDLOGS
-export CCACHE_RECACHE=0
 checkError $? "building externals failed" "compilation error" "Need to build the externals directory locally in $TRAVIS_OS_NAME"
 exit 0;

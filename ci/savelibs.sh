@@ -14,6 +14,10 @@ checkError()
   fi
 }
 
+if [ "$TRAVIS_OS_NAME" = "osx" ] ;
+then
+  exit 0;
+fi
 NODE_VER="10.15.3"
 
 #mention dirs for other externals directory
