@@ -1,0 +1,12 @@
+prefix=/home/travis/build/kannanmadanagopalt/Spark-Externals/extlibs
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include/gstreamer-1.0
+
+Name: GStreamer Player
+Description: GStreamer Player convenience library
+Requires: gstreamer-1.0 gstreamer-video-1.0
+Version: 1.16.0
+Libs: -L${libdir} -lgstplayer-1.0
+Cflags: -I${includedir}
+
