@@ -18,8 +18,9 @@ NODE_VER="10.15.3"
 
 #mention dirs for other externals directory
 BREAKPAD_LIB_DIR="`pwd`/breakpad-chrome_55/src/client/linux/"
-BREAKPAD_INCLUDE_DIR="`pwd`/breakpad-chrome_55/src/"
+BREAKPAD_INCLUDE_DIR="`pwd`/breakpad-chrome_55/"
 GIF_LIB_DIR="`pwd`/gif/.libs/"
+DUKTAPE_LIB_DIR="`pwd`/dukluv/build/"
 NODE_LIB_DIR="`pwd`/libnode-v${NODE_VER}/out/Release/obj.target"
 OPENSSL_LIB_DIR="`pwd`/openssl-1.0.2o/"
 SPARK_WEBGL_DIR="`pwd`/spark-webgl/build/Release/"
@@ -52,6 +53,7 @@ else
   cp -R ${GIF_LIB_DIR}/libgif.*.dylib ${EXT_INSTALL_LIB_PATH}/.
   cp -R ${GIF_LIB_DIR}/libutil.*.dylib ${EXT_INSTALL_LIB_PATH}/.
 fi
+cp -R ${DUKTAPE_LIB_DIR}/*.a ${EXT_INSTALL_LIB_PATH}/.
 cp ${SPARK_WEBGL_DIR}/gles2.node ${NODE_MODULES_PATH}/.
 
 #copy all externals dirs
