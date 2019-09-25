@@ -18,7 +18,7 @@ NODE_VER="10.15.3"
 
 #mention dirs for other externals directory
 BREAKPAD_LIB_DIR="`pwd`/breakpad-chrome_55/src/client/linux/"
-BREAKPAD_INCLUDE_DIR="`pwd`/breakpad-chrome_55/"
+#BREAKPAD_INCLUDE_DIR="`pwd`/breakpad-chrome_55/"
 GIF_LIB_DIR="`pwd`/gif/.libs/"
 DUKTAPE_LIB_DIR="`pwd`/dukluv/build/"
 NODE_LIB_DIR="`pwd`/libnode-v${NODE_VER}/out/Release/obj.target"
@@ -41,8 +41,8 @@ then
   cp -R ${NODE_LIB_DIR}/libnode.so.64 ${EXT_INSTALL_LIB_PATH}/.
   cp -R ${NODE_LIB_DIR}/../node ${EXT_INSTALL_BIN_PATH}/.
   cp -R ${BREAKPAD_LIB_DIR}/libbreakpad_client.a ${EXT_INSTALL_LIB_PATH}/.
-  mkdir -p ${EXT_INSTALL_INCLUDE_PATH}/breakpad
-  cp -R ${BREAKPAD_INCLUDE_DIR}/src ${EXT_INSTALL_INCLUDE_PATH}/breakpad/.
+  #mkdir -p ${EXT_INSTALL_INCLUDE_PATH}/breakpad
+  #cp -R ${BREAKPAD_INCLUDE_DIR}/src ${EXT_INSTALL_INCLUDE_PATH}/breakpad/.
   find ${GIF_LIB_DIR} -name libgif*
   cp -R ${GIF_LIB_DIR}/libgif.so ${EXT_INSTALL_LIB_PATH}/.
   cp -R ${GIF_LIB_DIR}/libutil.so ${EXT_INSTALL_LIB_PATH}/.

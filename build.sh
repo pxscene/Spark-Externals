@@ -40,7 +40,7 @@ orc_build=0
 osspuuid_build=0
 pcre_build=0
 sparkwebgl_build=0
-sqliteautoconf_build=0
+sqliteautoconf_build=1
 #this may not be needed
 uwebsockets_build=0
 xz_build=0
