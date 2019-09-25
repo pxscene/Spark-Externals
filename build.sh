@@ -711,7 +711,7 @@ if [ $uwebsockets_build -eq 1 ]; then
 
 fi
 
-if [ $sqlite_build -eq 1 ]; then
+if [ $sqliteautoconf_build -eq 1 ]; then
   banner "SQLITE"
 
   cd sqlite
