@@ -378,7 +378,6 @@ if [ $openssl_build -eq 1 ]; then
 fi
 
 if [ $libpng_build -eq 1 ]; then
-then
 
   banner "PNG"
 
@@ -394,7 +393,6 @@ fi
 #--------- JPG
 #
 if [ $jpeg9a_build -eq 1 ]; then
-then
 
   banner "JPG"
 
