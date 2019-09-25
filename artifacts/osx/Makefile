@@ -13,8 +13,8 @@ SHLIB_MAJOR=1
 SHLIB_MINOR=0.0
 SHLIB_EXT=.$(SHLIB_MAJOR).$(SHLIB_MINOR).dylib
 PLATFORM=darwin64-x86_64-cc
-OPTIONS=enable-shared --prefix=/Users/travis/build/kannanmadanagopalt/Spark-Externals/openssl-1.0.2o no-ec_nistp_64_gcc_128 no-gmp no-jpake no-krb5 no-libunbound no-md2 no-rc5 no-rfc3779 no-sctp no-ssl-trace no-ssl2 no-store no-unit-test no-weak-ssl-ciphers no-zlib no-zlib-dynamic no-static-engine
-CONFIGURE_ARGS=darwin64-x86_64-cc -shared --prefix=/Users/travis/build/kannanmadanagopalt/Spark-Externals/openssl-1.0.2o
+OPTIONS=enable-shared --prefix=/Users/travis/build/kannanmadanagopalt/Spark-Externals/extlibs no-ec_nistp_64_gcc_128 no-gmp no-jpake no-krb5 no-libunbound no-md2 no-rc5 no-rfc3779 no-sctp no-ssl-trace no-ssl2 no-store no-unit-test no-weak-ssl-ciphers no-zlib no-zlib-dynamic no-static-engine
+CONFIGURE_ARGS=darwin64-x86_64-cc -shared --prefix=/Users/travis/build/kannanmadanagopalt/Spark-Externals/extlibs
 SHLIB_TARGET=darwin-shared
 
 # HERE indicates where this Makefile lives.  This can be used to indicate
@@ -26,10 +26,10 @@ HERE=.
 # for, say, /usr/ and yet have everything installed to /tmp/somedir/usr/.
 # Normally it is left empty.
 INSTALL_PREFIX=
-INSTALLTOP=/Users/travis/build/kannanmadanagopalt/Spark-Externals/openssl-1.0.2o
+INSTALLTOP=/Users/travis/build/kannanmadanagopalt/Spark-Externals/extlibs
 
 # Do not edit this manually. Use Configure --openssldir=DIR do change this!
-OPENSSLDIR=/Users/travis/build/kannanmadanagopalt/Spark-Externals/openssl-1.0.2o/ssl
+OPENSSLDIR=/Users/travis/build/kannanmadanagopalt/Spark-Externals/extlibs/ssl
 
 # NO_IDEA - Define to build without the IDEA algorithm
 # NO_RC4  - Define to build without the RC4 algorithm

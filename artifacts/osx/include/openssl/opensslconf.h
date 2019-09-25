@@ -121,8 +121,8 @@ extern "C" {
 
 #if !(defined(VMS) || defined(__VMS)) /* VMS uses logical names instead */
 #if defined(HEADER_CRYPTLIB_H) && !defined(OPENSSLDIR)
-#define ENGINESDIR "/Users/travis/build/kannanmadanagopalt/Spark-Externals/openssl-1.0.2o/lib/engines"
-#define OPENSSLDIR "/Users/travis/build/kannanmadanagopalt/Spark-Externals/openssl-1.0.2o/ssl"
+#define ENGINESDIR "/Users/travis/build/kannanmadanagopalt/Spark-Externals/extlibs/lib/engines"
+#define OPENSSLDIR "/Users/travis/build/kannanmadanagopalt/Spark-Externals/extlibs/ssl"
 #endif
 #endif
 
