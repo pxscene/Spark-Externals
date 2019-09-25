@@ -11,7 +11,7 @@ aampbr_build=0
 aamp_build=0
 breakpadchrome_build=0
 cjson_build=0
-curl_build=0
+curl_build=1
 dukluv_build=0
 fontconfig_build=0
 freetype_build=0
@@ -27,12 +27,12 @@ gstpluginsugly_build=0
 gstreamer_build=0
 harfbuzz_build=0
 icu_build=0
-jpeg9a_build=1
+jpeg9a_build=0
 libdash_build=0
 libffi_build=0
-libjpegturbo_build=0
+libjpegturbo_build=1
 libnode_build=0
-libpng_build=1
+libpng_build=0
 libxml2_build=0
 nanosvg_build=0
 openssl_build=0
@@ -43,7 +43,7 @@ sparkwebgl_build=0
 sqliteautoconf_build=0
 uwebsockets_build=0
 xz_build=0
-zlib_build=0
+zlib_build=1
 
 #depends information
 openssl_depends=("openssl")
@@ -500,6 +500,74 @@ if [ $openssl_build -eq 1 ]; then
   cp -r ${OPENSSL_DIR}/* $EXT_INSTALL_PATH
 fi
 
+#--------- CURL
+
+if [ $curl_build -eq 1 ]; then
+
+  banner "CURL"
+
+  cd curl
+
+  CPPFLAGS="-I${OPENSSL_DIR} -I${OPENSSL_DIR}/include" LDFLAGS="-L${OPENSSL_DIR}/lib -Wl,-rpath,${OPENSSL_DIR}/lib " LIBS="-ldl -lpthread" PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./configure --with-ssl="${OPENSSL_DIR}" --prefix=$EXT_INSTALL_PATH
+
+  if [ "$(uname)" = "Darwin" ]; then
+    #Removing api definition for Yosemite compatibility.
+    sed -i '' '/#define HAVE_CLOCK_GETTIME_MONOTONIC 1/d' lib/curl_config.h
+  fi
+
+  
+  make all "-j${make_parallel}"
+  make install
+  cd ..
+
+fi
+#---------
+
+#--------- ZLIB
+
+if [ $zlib_build -eq 1 ]; then
+
+  banner "ZLIB"
+
+  cd zlib
+  ./configure --prefix=$EXT_INSTALL_PATH
+  make all "-j${make_parallel}"
+  make install
+  cd ..
+
+fi
+#---------
+
+#--------- LIBJPEG TURBO (Non -macOS)
+
+if [ $libjpegturbo_build -eq 1 ]; then
+
+  banner "TURBO"
+
+  cd libjpeg-turbo
+  git update-index --assume-unchanged Makefile.in
+  git update-index --assume-unchanged aclocal.m4
+  git update-index --assume-unchanged ar-lib
+  git update-index --assume-unchanged compile
+  git update-index --assume-unchanged config.guess
+  git update-index --assume-unchanged config.h.in
+  git update-index --assume-unchanged config.sub
+  git update-index --assume-unchanged configure
+  git update-index --assume-unchanged depcomp
+  git update-index --assume-unchanged install-sh
+  git update-index --assume-unchanged java/Makefile.in
+  git update-index --assume-unchanged ltmain.sh
+  git update-index --assume-unchanged md5/Makefile.in
+  git update-index --assume-unchanged missing
+  git update-index --assume-unchanged simd/Makefile.in
+
+  autoreconf -f -i
+  ./configure --prefix=$EXT_INSTALL_PATH
+  make "-j${make_parallel}"
+  make install
+  cd ..
+
+fi
 #--------
 
 #--------- LIBNODE
