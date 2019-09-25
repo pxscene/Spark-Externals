@@ -5,44 +5,44 @@ export CCACHE_RECACHE=1
 modified_component_list=()
 
 #build flags
-artifacts_build=1
-aampbr_build=1
-aamp_build=1
-breakpadchrome_build=1
-cjson_build=1
-curl_build=1
-dukluv_build=1
-fontconfig_build=1
-freetype_build=1
-gettext_build=1
-giflib_build=1
-glib_build=1
-graphite2_build=1
-gstlibav_build=1
-gstpluginsbad_build=1
-gstpluginsbase_build=1
-gstpluginsgood_build=1
-gstpluginsugly_build=1
-gstreamer_build=1
-harfbuzz_build=1
-icu_build=1
-jpeg9a_build=1
-libdash_build=1
-libffi_build=1
-libjpegturbo_build=1
+artifacts_build=0
+aampbr_build=0
+aamp_build=0
+breakpadchrome_build=0
+cjson_build=0
+curl_build=0
+dukluv_build=0
+fontconfig_build=0
+freetype_build=0
+gettext_build=0
+giflib_build=0
+glib_build=0
+graphite2_build=0
+gstlibav_build=0
+gstpluginsbad_build=0
+gstpluginsbase_build=0
+gstpluginsgood_build=0
+gstpluginsugly_build=0
+gstreamer_build=0
+harfbuzz_build=0
+icu_build=0
+jpeg9a_build=0
+libdash_build=0
+libffi_build=0
+libjpegturbo_build=0
 libnode_build=1
-libpng_build=1
-libxml2_build=1
-nanosvg_build=1
-openssl_build=1
-orc_build=1
-osspuuid_build=1
-pcre_build=1
-sparkwebgl_build=1
-sqliteautoconf_build=1
-uwebsockets_build=1
-xz_build=1
-zlib_build=1
+libpng_build=0
+libxml2_build=0
+nanosvg_build=0
+openssl_build=0
+orc_build=0
+osspuuid_build=0
+pcre_build=0
+sparkwebgl_build=0
+sqliteautoconf_build=0
+uwebsockets_build=0
+xz_build=0
+zlib_build=0
 
 #depends information
 openssl_depends=("openssl")
@@ -362,13 +362,8 @@ if [ $openssl_build -eq 1 ]; then
   else
   ./Configure darwin64-x86_64-cc -shared --prefix=`pwd`
   fi
-  echo "before clean"
-  find . -name "libcrypto.so*"
   make clean
-  echo "after clean"
-  find . -name libcrypto.so*
   make "-j1"
-  echo "after build"
   make install -i
   rm -rf libcrypto.a
   rm -rf libssl.a
@@ -382,92 +377,92 @@ if [ $openssl_build -eq 1 ]; then
 fi
 
 #--------graphite2
-#if [ $graphite2_build -eq 1 ]; then
-#  banner "graphite2"
-#
-#  ./graphite2/build.sh
-#fi
-#
-##--------
-#
-#ls -lrt extlibs/lib
-##-------- pcre
-#if [ $pcre_build -eq 1 ]; then
-#  banner "pcre"
-#
-#  ./pcre/build.sh
-#fi
-##--------
-#
-##--------icu
-#
-#if [ $icu_build -eq 1 ]; then
-#  banner "icu"
-#
-#  ./icu/build.sh
-#fi
-#
-##--------
-#
-##-------- libffi
-#
-#if [ $libffi_build -eq 1 ]; then
-#  banner "libffi"
-#
-#  ./libffi/build.sh
-#fi
-#
-##--------
-#
-##--------gettext
-#
-#if [ $gettext_build -eq 1 ]; then
-#  banner "gettext"
-#
-#  ./gettext/build.sh
-#fi
-#
-##--------
-#
-##--------glib
-#
-#if [ $glib_build -eq 1 ]; then
-#  banner "glib"
-#
-#  ./glib/build.sh
-#fi
-#
-##--------
-#
-##--------- FT
-#
-#if [ $freetype_build -eq 1 ]; then
-#  banner "FT"
-#
-#  cd ft
-#
-#  LIBPNG_LIBS="-L../png/.libs -lpng16" PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./configure --with-png=no --with-harfbuzz=no --prefix=$EXT_INSTALL_PATH
-#  make all "-j${make_parallel}"
-#  make install
-#  cd ..
-#fi
-##---------
-#
-#if [ $fontconfig_build -eq 1 ]; then
-#  banner "Fontconfig"
-#
-#  PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./fontconfig/build.sh
-#fi
-#
-##--------
-#
-##--------harfbuzz
-#
-#if [ $harfbuzz_build -eq 1 ]; then
-#  banner "harfbuzz"
-#
-#  ./harfbuzz/build.sh
-#fi
+if [ $graphite2_build -eq 1 ]; then
+  banner "graphite2"
+
+  ./graphite2/build.sh
+fi
+
+#--------
+
+ls -lrt extlibs/lib
+#-------- pcre
+if [ $pcre_build -eq 1 ]; then
+  banner "pcre"
+
+  ./pcre/build.sh
+fi
+#--------
+
+#--------icu
+
+if [ $icu_build -eq 1 ]; then
+  banner "icu"
+
+  ./icu/build.sh
+fi
+
+#--------
+
+#-------- libffi
+
+if [ $libffi_build -eq 1 ]; then
+  banner "libffi"
+
+  ./libffi/build.sh
+fi
+
+#--------
+
+#--------gettext
+
+if [ $gettext_build -eq 1 ]; then
+  banner "gettext"
+
+  ./gettext/build.sh
+fi
+
+#--------
+
+#--------glib
+
+if [ $glib_build -eq 1 ]; then
+  banner "glib"
+
+  ./glib/build.sh
+fi
+
+#--------
+
+#--------- FT
+
+if [ $freetype_build -eq 1 ]; then
+  banner "FT"
+
+  cd ft
+
+  LIBPNG_LIBS="-L../png/.libs -lpng16" PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./configure --with-png=no --with-harfbuzz=no --prefix=$EXT_INSTALL_PATH
+  make all "-j${make_parallel}"
+  make install
+  cd ..
+fi
+#---------
+
+if [ $fontconfig_build -eq 1 ]; then
+  banner "Fontconfig"
+
+  PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./fontconfig/build.sh
+fi
+
+#--------
+
+#--------harfbuzz
+
+if [ $harfbuzz_build -eq 1 ]; then
+  banner "harfbuzz"
+
+  ./harfbuzz/build.sh
+fi
 
 #-------- openssl
 
@@ -481,44 +476,44 @@ fi
 
 #--------- LIBNODE
 
-#if [ $libnode_build -eq 1 ]; then
-#  banner "NODE"
-#  if [ -e "node-v${NODE_VER}_mods.patch" ]
-#  then
-#    git apply "node-v${NODE_VER}_mods.patch"
-#    git apply "openssl_1.0.2_compatibility.patch"
-#  fi
-#
-#  cd "libnode-v${NODE_VER}"
-#  ./configure --shared --shared-openssl --shared-openssl-includes="${OPENSSL_DIR}/include/" --shared-openssl-libpath="${OPENSSL_DIR}/lib"
-#  make "-j${make_parallel}"
-#
-#  if [ "$(uname)" != "Darwin" ]
-#  then
-#    ln -sf out/Release/obj.target/libnode.so.* ./
-#    ln -sf libnode.so.* libnode.so
-#  else
-#    ln -sf out/Release/libnode.*.dylib ./
-#    ln -sf libnode.*.dylib libnode.dylib
-#  fi
-#
-#  cd ..
-#  if [ -e "node" ]
-#  then
-#    rm -rf node
-#  fi
-#  ln -sf "libnode-v${NODE_VER}" node
-#fi
+if [ $libnode_build -eq 1 ]; then
+  banner "NODE"
+  if [ -e "node-v${NODE_VER}_mods.patch" ]
+  then
+    git apply "node-v${NODE_VER}_mods.patch"
+    git apply "openssl_1.0.2_compatibility.patch"
+  fi
+
+  cd "libnode-v${NODE_VER}"
+  ./configure --shared --shared-openssl --shared-openssl-includes="${EXT_INSTALL_PATH}/include/" --shared-openssl-libpath="${EXT_INSTALL_PATH}/lib"
+  make "-j${make_parallel}"
+
+  if [ "$(uname)" != "Darwin" ]
+  then
+    ln -sf out/Release/obj.target/libnode.so.* ./
+    ln -sf libnode.so.* libnode.so
+  else
+    ln -sf out/Release/libnode.*.dylib ./
+    ln -sf libnode.*.dylib libnode.dylib
+  fi
+
+  cd ..
+  if [ -e "node" ]
+  then
+    rm -rf node
+  fi
+  ln -sf "libnode-v${NODE_VER}" node
+fi
 ##---------
 #
-##-------- spark-webgl
-#if [ $sparkwebgl_build -eq 1 ]; then
-#  export NODE_PATH=$NODE_PATH:`pwd`/../node_modules
-#  export PATH=`pwd`/node/deps/npm/bin/node-gyp-bin/:`pwd`/node/out/Release:$PATH
-#  cd spark-webgl
-#  node-gyp rebuild
-#  cd ..
-#fi
+#-------- spark-webgl
+if [ $sparkwebgl_build -eq 1 ]; then
+  export NODE_PATH=$NODE_PATH:`pwd`/../node_modules
+  export PATH=`pwd`/node/deps/npm/bin/node-gyp-bin/:`pwd`/node/out/Release:$PATH
+  cd spark-webgl
+  node-gyp rebuild
+  cd ..
+fi
 
 #-------- cJSON
 
