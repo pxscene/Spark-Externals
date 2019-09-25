@@ -17,6 +17,8 @@ checkError()
 NODE_VER="10.15.3"
 
 #mention dirs for other externals directory
+BREAKPAD_LIB_DIR="`pwd`/breakpad-chrome_55/src/client/linux/"
+GIF_LIB_DIR="`pwd`/gif/.libs/"
 NODE_LIB_DIR="`pwd`/libnode-v${NODE_VER}/out/Release/obj.target"
 OPENSSL_LIB_DIR="`pwd`/openssl-1.0.2o/"
 SPARK_WEBGL_DIR="`pwd`/spark-webgl/build/Release/"
@@ -36,9 +38,16 @@ if [ "$(uname)" != "Darwin" ]
 then
   cp -R ${NODE_LIB_DIR}/libnode.so.64 ${EXT_INSTALL_LIB_PATH}/.
   cp -R ${NODE_LIB_DIR}/../node ${EXT_INSTALL_BIN_PATH}/.
+  cp -R ${BREAKPAD_LIB_DIR}/libbreakpad_client.a ${EXT_INSTALL_LIB_PATH}/.
+  find ${GIF_LIB_DIR} -name libgif*
+  cp -R ${GIF_LIB_DIR}/libgif.so ${EXT_INSTALL_LIB_PATH}/.
+  cp -R ${GIF_LIB_DIR}/libutil.so ${EXT_INSTALL_LIB_PATH}/.
 else
   cp -R ${NODE_LIB_DIR}/../libnode.*.dylib ${EXT_INSTALL_LIB_PATH}/.
   cp -R ${NODE_LIB_DIR}/../node ${EXT_INSTALL_LIB_PATH}/.
+  find ${GIF_LIB_DIR} -name libgif*
+  cp -R ${GIF_LIB_DIR}/libgif.*.dylib ${EXT_INSTALL_LIB_PATH}/.
+  cp -R ${GIF_LIB_DIR}/libutil.*.dylib ${EXT_INSTALL_LIB_PATH}/.
 fi
 cp ${SPARK_WEBGL_DIR}/gles2.node ${NODE_MODULES_PATH}/.
 

@@ -9,9 +9,9 @@ modified_component_list=()
 artifacts_build=0
 aampbr_build=0
 aamp_build=0
-breakpadchrome_build=0
+breakpadchrome_build=1
 cjson_build=0
-curl_build=1
+curl_build=0
 dukluv_build=0
 fontconfig_build=0
 freetype_build=0
@@ -27,10 +27,10 @@ gstpluginsugly_build=0
 gstreamer_build=0
 harfbuzz_build=0
 icu_build=0
-jpeg9a_build=1
+jpeg9a_build=0
 libdash_build=0
 libffi_build=0
-libjpegturbo_build=1
+libjpegturbo_build=0
 libnode_build=0
 libpng_build=0
 libxml2_build=0
@@ -41,9 +41,10 @@ osspuuid_build=0
 pcre_build=0
 sparkwebgl_build=0
 sqliteautoconf_build=0
+#this may not be needed
 uwebsockets_build=0
 xz_build=0
-zlib_build=1
+zlib_build=0
 
 #depends information
 openssl_depends=("openssl")
@@ -462,6 +463,51 @@ if [ $glib_build -eq 1 ]; then
 fi
 
 #--------
+##--------- GIF
+#
+if [ $giflib_build -eq 1 ]; then
+  banner "GIF"
+  
+  cd gif
+  if [ "$(uname)" == "Darwin" ]; then
+  
+  [ -d patches ] || mkdir -p patches
+  [ -d patches/series ] || echo 'giflib-5.1.9.patch' >patches/series
+  cp ../giflib-5.1.9.patch patches/
+  
+  if [[ "$#" -eq "1" && "$1" == "--clean" ]]; then
+  	quilt pop -afq || test $? = 2
+  	rm -rf .libs/*
+  elif [[ "$#" -eq "1" && "$1" == "--force-clean" ]]; then
+  	git clean -fdx .
+  	git checkout .
+  	rm -rf .libs/*
+  else
+  	quilt push -aq || test $? = 2
+  fi
+  
+  fi
+  
+  if [ ! -e ./.libs/libgif.7.dylib ] ||
+  [ "$(uname)" != "Darwin" ]
+  then
+      make
+  [ -d .libs ] || mkdir -p .libs
+  if [ -e libgif.7.dylib ]
+  then
+      cp libgif.7.dylib .libs/libgif.7.dylib
+      cp libutil.7.dylib .libs/libutil.7.dylib
+  
+  
+  elif [ -e libgif.so ]
+  then
+      cp libgif.so .libs/libgif.so
+      cp libutil.so .libs/libutil.so
+  fi
+  fi
+  
+  cd ..
+fi
 
 #--------- FT
 
@@ -541,33 +587,36 @@ fi
 
 #--------- LIBJPEG TURBO (Non -macOS)
 
-if [ $libjpegturbo_build -eq 1 ]; then
-
-  banner "TURBO"
-
-  cd libjpeg-turbo
-  git update-index --assume-unchanged Makefile.in
-  git update-index --assume-unchanged aclocal.m4
-  git update-index --assume-unchanged ar-lib
-  git update-index --assume-unchanged compile
-  git update-index --assume-unchanged config.guess
-  git update-index --assume-unchanged config.h.in
-  git update-index --assume-unchanged config.sub
-  git update-index --assume-unchanged configure
-  git update-index --assume-unchanged depcomp
-  git update-index --assume-unchanged install-sh
-  git update-index --assume-unchanged java/Makefile.in
-  git update-index --assume-unchanged ltmain.sh
-  git update-index --assume-unchanged md5/Makefile.in
-  git update-index --assume-unchanged missing
-  git update-index --assume-unchanged simd/Makefile.in
-
-  autoreconf -f -i
-  ./configure --prefix=$EXT_INSTALL_PATH
-  make "-j${make_parallel}"
-  make install
-  cd ..
-
+if [ "$(uname)" != "Darwin" ]
+then
+  if [ $libjpegturbo_build -eq 1 ]; then
+  
+    banner "TURBO"
+  
+    cd libjpeg-turbo
+    git update-index --assume-unchanged Makefile.in
+    git update-index --assume-unchanged aclocal.m4
+    git update-index --assume-unchanged ar-lib
+    git update-index --assume-unchanged compile
+    git update-index --assume-unchanged config.guess
+    git update-index --assume-unchanged config.h.in
+    git update-index --assume-unchanged config.sub
+    git update-index --assume-unchanged configure
+    git update-index --assume-unchanged depcomp
+    git update-index --assume-unchanged install-sh
+    git update-index --assume-unchanged java/Makefile.in
+    git update-index --assume-unchanged ltmain.sh
+    git update-index --assume-unchanged md5/Makefile.in
+    git update-index --assume-unchanged missing
+    git update-index --assume-unchanged simd/Makefile.in
+  
+    autoreconf -f -i
+    ./configure --prefix=$EXT_INSTALL_PATH
+    make "-j${make_parallel}"
+    make install
+    cd ..
+  
+  fi
 fi
 #--------
 
@@ -575,6 +624,10 @@ fi
 
 if [ $libnode_build -eq 1 ]; then
   banner "NODE"
+  if [ -e "${EXT_INSTALL_PATH}/include/unicode" ]
+  then
+    mv ${EXT_INSTALL_PATH}/include/unicode ${EXT_INSTALL_PATH}/include/unicode_old
+  fi
   if [ -e "node-v${NODE_VER}_mods.patch" ]
   then
     git apply "node-v${NODE_VER}_mods.patch"
@@ -600,15 +653,72 @@ if [ $libnode_build -eq 1 ]; then
     rm -rf node
   fi
   ln -sf "libnode-v${NODE_VER}" node
+  if [ -e "${EXT_INSTALL_PATH}/include/unicode_old" ]
+  then
+    mv ${EXT_INSTALL_PATH}/include/unicode_old ${EXT_INSTALL_PATH}/include/unicode
+  fi
 fi
 ##---------
 #
+if [ "$(uname)" != "Darwin" ]
+then
+  if [ $breakpadchrome_build -eq 1 ]; then
+    ./breakpad/build.sh
+  fi
+fi
+#---------
+
+if [ $nanosvg_build -eq 1 ]; then
+#-------- NANOSVG
+
+  banner "NANOSVG"
+
+./nanosvg/build.sh
+fi
+#---------
+
+#-------- DUKTAPE
+
+if [ $dukluv_build -eq 1 ]; then
+  banner "DUCKTAPE"
+
+  ./dukluv/build.sh
+fi
+
 #-------- spark-webgl
 if [ $sparkwebgl_build -eq 1 ]; then
   export NODE_PATH=$NODE_PATH:`pwd`/../node_modules
   export PATH=`pwd`/node/deps/npm/bin/node-gyp-bin/:`pwd`/node/out/Release:$PATH
   cd spark-webgl
   node-gyp rebuild
+  cd ..
+fi
+
+#--------- uWebSockets
+if [ $uwebsockets_build -eq 1 ]; then
+
+  banner "uWEBSOCKETS"
+
+  cd uWebSockets
+
+  if [ -e Makefile.build ]
+  then
+    mv Makefile.build Makefile
+  fi
+
+  CPPFLAGS="-I${EXT_INSTALL_PATH} -I${EXT_INSTALL_PATH}/openssl/include" LDFLAGS="-L${EXT_INSTALL_PATH}/lib -Wl,-rpath,${EXT_INSTALL_PATH}/lib " make
+  cd ..
+
+fi
+
+if [ $sqlite_build -eq 1 ]; then
+  banner "SQLITE"
+
+  cd sqlite
+  autoreconf -f -i
+  ./configure --prefix=$EXT_INSTALL_PATH
+  make -j3
+  make install
   cd ..
 fi
 
