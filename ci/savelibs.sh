@@ -18,7 +18,8 @@ NODE_VER="10.15.3"
 
 #mention dirs for other externals directory
 BREAKPAD_LIB_DIR="`pwd`/breakpad-chrome_55/src/client/linux/"
-#BREAKPAD_INCLUDE_DIR="`pwd`/breakpad-chrome_55/"
+NANOSVG_DIR="`pwd`/nanosvg"
+BREAKPAD_INCLUDE_DIR="`pwd`/breakpad-chrome_55/"
 GIF_LIB_DIR="`pwd`/gif/.libs/"
 SQLITE_LIB_DIR="`pwd`/sqlite-autoconf-3280000/.libs"
 DUKTAPE_LIB_DIR="`pwd`/dukluv/build/"
@@ -42,9 +43,9 @@ then
   cp -R ${NODE_LIB_DIR}/libode.so.64 ${EXT_INSTALL_LIB_PATH}/.
   cp -R ${NODE_LIB_DIR}/../node ${EXT_INSTALL_BIN_PATH}/.
   cp -R ${BREAKPAD_LIB_DIR}/libbreakpad_client.a ${EXT_INSTALL_LIB_PATH}/.
-  #mkdir -p ${EXT_INSTALL_INCLUDE_PATH}/breakpad
-  #cp -R ${BREAKPAD_INCLUDE_DIR}/src ${EXT_INSTALL_INCLUDE_PATH}/breakpad/.
-  find ${GIF_LIB_DIR} -name libgif*
+  mkdir -p ${EXT_INSTALL_INCLUDE_PATH}/breakpad
+  cp -R ${BREAKPAD_INCLUDE_DIR}/src/* ${EXT_INSTALL_INCLUDE_PATH}/breakpad/.
+  find ${EXT_INSTALL_INCLUDE_PATH}/breakpad/ -type f ! -name "*.h" -exec rm -rf {} \;
   cp -R ${GIF_LIB_DIR}/libgif.so ${EXT_INSTALL_LIB_PATH}/.
   cp -R ${GIF_LIB_DIR}/libutil.so ${EXT_INSTALL_LIB_PATH}/.
   cp ${SQLITE_LIB_DIR}/libsqlite*.so* ${EXT_INSTALL_LIB_PATH}/.
@@ -60,7 +61,8 @@ else
 fi
 cp -R ${DUKTAPE_LIB_DIR}/*.a ${EXT_INSTALL_LIB_PATH}/.
 cp ${SPARK_WEBGL_DIR}/gles2.node ${NODE_MODULES_PATH}/.
-
+mkdir -p ${EXT_INSTALL_INCLUDE_PATH}/nanosvg
+cp ${NANOSVG_DIR}/src/nanosvgrast.h ${EXT_INSTALL_INCLUDE_PATH}/nanosvg/.
 #copy all externals dirs
 #cp -R ${EXT_LIBS_DIR}/* ${EXT_INSTALL_LIB_PATH}/.
 #cp -R ${EXT_INCLUDE_DIR}/* ${EXT_INSTALL_INCLUDE_PATH}/.
