@@ -616,7 +616,6 @@ if [ $gstpluginsugly_build -eq 1 ]; then
 
   ./gst-plugins-ugly/build.sh
 fi
-
 #--------
 #-------- gst-plugin-good
 
