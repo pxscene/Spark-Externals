@@ -509,7 +509,7 @@ if [ $curl_build -eq 1 ]; then
 
   cd curl
 
-  CPPFLAGS="-I${OPENSSL_DIR} -I${OPENSSL_DIR}/include" LDFLAGS="-L${OPENSSL_DIR}/lib -Wl,-rpath,${OPENSSL_DIR}/lib " LIBS="-ldl -lpthread" PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./configure --with-ssl="${OPENSSL_DIR}" --prefix=$EXT_INSTALL_PATH
+  CPPFLAGS="-I${OPENSSL_DIR} -I${OPENSSL_DIR}/include" LDFLAGS="-L${EXT_INSTALL_PATH}/lib -Wl,-rpath,${EXT_INSTALL_PATH}/lib " LIBS="-ldl -lpthread" PKG_CONFIG_PATH="${EXT_INSTALL_PATH}/lib/pkgconfig:$PKG_CONFIG_PATH" ./configure --with-ssl="${EXT_INSTALL_PATH}" --prefix=$EXT_INSTALL_PATH
 
   if [ "$(uname)" = "Darwin" ]; then
     #Removing api definition for Yosemite compatibility.
