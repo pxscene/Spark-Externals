@@ -13,8 +13,8 @@ SHLIB_MAJOR=1
 SHLIB_MINOR=0.0
 SHLIB_EXT=.so.$(SHLIB_MAJOR).$(SHLIB_MINOR)
 PLATFORM=linux-x86_64
-OPTIONS=enable-shared --prefix=/home/travis/build/kannanmadanagopalt/Spark-Externals/openssl-1.0.2o -Wa,--noexecstack no-ec_nistp_64_gcc_128 no-gmp no-jpake no-krb5 no-libunbound no-md2 no-rc5 no-rfc3779 no-sctp no-ssl-trace no-ssl2 no-store no-unit-test no-weak-ssl-ciphers no-zlib no-zlib-dynamic no-static-engine
-CONFIGURE_ARGS=linux-x86_64 -shared --prefix=/home/travis/build/kannanmadanagopalt/Spark-Externals/openssl-1.0.2o -Wa,--noexecstack
+OPTIONS=enable-shared --prefix=/home/travis/build/kannanmadanagopalt/Spark-Externals/extlibs -Wa,--noexecstack no-ec_nistp_64_gcc_128 no-gmp no-jpake no-krb5 no-libunbound no-md2 no-rc5 no-rfc3779 no-sctp no-ssl-trace no-ssl2 no-store no-unit-test no-weak-ssl-ciphers no-zlib no-zlib-dynamic no-static-engine
+CONFIGURE_ARGS=linux-x86_64 -shared --prefix=/home/travis/build/kannanmadanagopalt/Spark-Externals/extlibs -Wa,--noexecstack
 SHLIB_TARGET=linux-shared
 
 # HERE indicates where this Makefile lives.  This can be used to indicate
@@ -26,10 +26,10 @@ HERE=.
 # for, say, /usr/ and yet have everything installed to /tmp/somedir/usr/.
 # Normally it is left empty.
 INSTALL_PREFIX=
-INSTALLTOP=/home/travis/build/kannanmadanagopalt/Spark-Externals/openssl-1.0.2o
+INSTALLTOP=/home/travis/build/kannanmadanagopalt/Spark-Externals/extlibs
 
 # Do not edit this manually. Use Configure --openssldir=DIR do change this!
-OPENSSLDIR=/home/travis/build/kannanmadanagopalt/Spark-Externals/openssl-1.0.2o/ssl
+OPENSSLDIR=/home/travis/build/kannanmadanagopalt/Spark-Externals/extlibs/ssl
 
 # NO_IDEA - Define to build without the IDEA algorithm
 # NO_RC4  - Define to build without the RC4 algorithm

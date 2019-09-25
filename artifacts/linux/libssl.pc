@@ -1,4 +1,4 @@
-prefix=/home/travis/build/kannanmadanagopalt/Spark-Externals/openssl-1.0.2o
+prefix=/home/travis/build/kannanmadanagopalt/Spark-Externals/extlibs
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
