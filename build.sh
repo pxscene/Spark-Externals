@@ -11,7 +11,7 @@ aampbr_build=0
 aamp_build=0
 breakpadchrome_build=0
 cjson_build=0
-curl_build=1
+curl_build=0
 dukluv_build=0
 fontconfig_build=0
 freetype_build=0
@@ -30,12 +30,12 @@ icu_build=0
 jpeg9a_build=0
 libdash_build=0
 libffi_build=0
-libjpegturbo_build=1
+libjpegturbo_build=0
 libnode_build=0
 libpng_build=0
 libxml2_build=0
 nanosvg_build=0
-openssl_build=0
+openssl_build=1
 orc_build=0
 osspuuid_build=0
 pcre_build=0
@@ -43,7 +43,7 @@ sparkwebgl_build=0
 sqliteautoconf_build=0
 uwebsockets_build=0
 xz_build=0
-zlib_build=1
+zlib_build=0
 
 #depends information
 openssl_depends=("openssl")
@@ -353,15 +353,18 @@ elif [ "$(uname)" = "Linux" ]; then
     LIBEXTN=so
 fi
 
+export LD_LIBRARY_PATH="${EXT_INSTALL_PATH}/:$LD_LIBRARY_PATH"
+export DYLD_LIBRARY_PATH="${EXT_INSTALL_PATH}/:$DYLD_LIBRARY_PATH"
+export PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH
 #--------- OPENSSL
 if [ $openssl_build -eq 1 ]; then
   export CCACHE_DISABLE=true
   cd ${OPENSSL_DIR}
   if [ "$(uname)" != "Darwin" ]
   then
-  ./config -shared  --prefix=`pwd`
+  ./config -shared  --prefix=$EXT_INSTALL_PATH
   else
-  ./Configure darwin64-x86_64-cc -shared --prefix=`pwd`
+  ./Configure darwin64-x86_64-cc -shared --prefix=$EXT_INSTALL_PATH
   fi
   make clean
   make "-j1"
@@ -371,8 +374,6 @@ if [ $openssl_build -eq 1 ]; then
   rm -rf lib/libcrypto.a
   rm -rf lib/libssl.a
   cd ..
-  export LD_LIBRARY_PATH="${OPENSSL_DIR}/:$LD_LIBRARY_PATH"
-  export DYLD_LIBRARY_PATH="${OPENSSL_DIR}/:$DYLD_LIBRARY_PATH"
   unset CCACHE_DISABLE
   ln -s ${OPENSSL_DIR} openssl
 fi
@@ -388,9 +389,6 @@ if [ $libpng_build -eq 1 ]; then
   cd ..
 
 fi
-export LD_LIBRARY_PATH="${EXT_INSTALL_PATH}/:$LD_LIBRARY_PATH"
-export DYLD_LIBRARY_PATH="${EXT_INSTALL_PATH}/:$DYLD_LIBRARY_PATH"
-export PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH
 #---------
 
 #--------- JPG
