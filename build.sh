@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
-export CCACHE_RECACHE=1
+#export CCACHE_RECACHE=1
+export CCACHE_DISABLE=true
 # Any subsequent(*) commands which fail will cause the shell script to exit immediately
 modified_component_list=()
 
@@ -651,4 +652,5 @@ fi
 
 #--------
 rm -rf extlibs
-export CCACHE_RECACHE=0
+#export CCACHE_RECACHE
+unset CCACHE_DISABLE

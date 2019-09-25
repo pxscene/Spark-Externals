@@ -22,9 +22,6 @@ checkError()
 
 echo "******************** Building externals ********************" > $BUILDLOGS
 cd $TRAVIS_BUILD_DIR
-if [ "$TRAVIS_OS_NAME" = "linux" ] ;
-then
 ./build.sh>>$BUILDLOGS
 checkError $? "building externals failed" "compilation error" "Need to build the externals directory locally in $TRAVIS_OS_NAME"
-fi
 exit 0;
