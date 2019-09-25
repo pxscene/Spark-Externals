@@ -27,12 +27,12 @@ gstpluginsugly_build=0
 gstreamer_build=0
 harfbuzz_build=0
 icu_build=0
-jpeg9a_build=0
+jpeg9a_build=1
 libdash_build=0
 libffi_build=0
 libjpegturbo_build=0
-libnode_build=1
-libpng_build=0
+libnode_build=0
+libpng_build=1
 libxml2_build=0
 nanosvg_build=0
 openssl_build=0
@@ -375,6 +375,35 @@ if [ $openssl_build -eq 1 ]; then
   export DYLD_LIBRARY_PATH="${OPENSSL_DIR}/:$DYLD_LIBRARY_PATH"
   unset CCACHE_DISABLE
   ln -s ${OPENSSL_DIR} openssl
+fi
+
+if [ $libpng_build -eq 1 ]; then
+then
+
+  banner "PNG"
+
+  cd png
+  ./configure --prefix=$EXT_INSTALL_PATH
+  make all "-j${make_parallel}"
+  make install
+  cd ..
+
+fi
+#---------
+
+#--------- JPG
+#
+if [ $jpeg9a_build -eq 1 ]; then
+then
+
+  banner "JPG"
+
+  cd jpg
+  ./configure --prefix=$EXT_INSTALL_PATH
+  make all "-j${make_parallel}"
+  make install
+  cd ..
+
 fi
 
 #--------graphite2
