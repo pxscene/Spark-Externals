@@ -9,7 +9,7 @@ modified_component_list=()
 artifacts_build=0
 aampbr_build=0
 aamp_build=0
-breakpadchrome_build=1
+breakpadchrome_build=0
 cjson_build=0
 curl_build=0
 dukluv_build=0
@@ -31,10 +31,10 @@ jpeg9a_build=0
 libdash_build=0
 libffi_build=0
 libjpegturbo_build=0
-libnode_build=0
+libnode_build=1
 libpng_build=0
 libxml2_build=0
-nanosvg_build=1
+nanosvg_build=0
 openssl_build=0
 orc_build=0
 osspuuid_build=0
@@ -635,17 +635,17 @@ if [ $libnode_build -eq 1 ]; then
   fi
 
   cd "libnode-v${NODE_VER}"
-  ./configure --shared --shared-openssl --shared-openssl-includes="${EXT_INSTALL_PATH}/include/" --shared-openssl-libpath="${EXT_INSTALL_PATH}/lib"
-  make "-j${make_parallel}"
+  #./configure --shared --shared-openssl --shared-openssl-includes="${EXT_INSTALL_PATH}/include/" --shared-openssl-libpath="${EXT_INSTALL_PATH}/lib"
+  #make "-j${make_parallel}"
 
-  if [ "$(uname)" != "Darwin" ]
-  then
-    ln -sf out/Release/obj.target/libnode.so.* ./
-    ln -sf libnode.so.* libnode.so
-  else
-    ln -sf out/Release/libnode.*.dylib ./
-    ln -sf libnode.*.dylib libnode.dylib
-  fi
+  #if [ "$(uname)" != "Darwin" ]
+  #then
+  #  ln -sf out/Release/obj.target/libnode.so.* ./
+  #  ln -sf libnode.so.* libnode.so
+  #else
+  #  ln -sf out/Release/libnode.*.dylib ./
+  #  ln -sf libnode.*.dylib libnode.dylib
+  #fi
 
   cd ..
   if [ -e "node" ]
