@@ -14,65 +14,12 @@ checkError()
   fi
 }
 
-NODE_VER="10.15.3"
-
-#mention dirs for other externals directory
-BREAKPAD_LIB_DIR="`pwd`/breakpad-chrome_55/src/client/linux/"
-NANOSVG_DIR="`pwd`/nanosvg"
-BREAKPAD_INCLUDE_DIR="`pwd`/breakpad-chrome_55"
-NODE_DIR="`pwd`/libnode-v10.15.3"
-GIF_LIB_DIR="`pwd`/gif/.libs/"
-SQLITE_LIB_DIR="`pwd`/sqlite-autoconf-3280000/.libs"
-DUKTAPE_LIB_DIR="`pwd`/dukluv/build/"
-NODE_LIB_DIR="`pwd`/libnode-v${NODE_VER}/out/Release/obj.target"
-OPENSSL_LIB_DIR="`pwd`/openssl-1.0.2o/"
-SPARK_WEBGL_DIR="`pwd`/spark-webgl/build/Release/"
-#EXT_LIBS_DIR=`pwd`/extlibs/lib
-#EXT_INCLUDE_DIR=`pwd`/extlibs/include
-
-#copy to external directories
+##copy to external directories
 EXT_INSTALL_PATH=$PWD/artifacts/${TRAVIS_OS_NAME}
 EXT_INSTALL_LIB_PATH=${EXT_INSTALL_PATH}/lib
 EXT_INSTALL_INCLUDE_PATH=${EXT_INSTALL_PATH}/include
 EXT_INSTALL_BIN_PATH=${EXT_INSTALL_PATH}/bin
 NODE_MODULES_PATH=${EXT_INSTALL_PATH}/node_modules
-
-find $EXT_INSTALL_PATH -name "*.o"|xargs rm -rf
-find ${SQLITE_LIB_DIR} -name libsql*
-if [ "$(uname)" != "Darwin" ]
-then
-  cp -R ${NODE_LIB_DIR}/libode.so.64 ${EXT_INSTALL_LIB_PATH}/.
-  cp -R ${NODE_LIB_DIR}/../node ${EXT_INSTALL_BIN_PATH}/.
-  cp -R ${BREAKPAD_LIB_DIR}/libbreakpad_client.a ${EXT_INSTALL_LIB_PATH}/.
-  mkdir -p ${EXT_INSTALL_INCLUDE_PATH}/breakpad
-  cp -R ${BREAKPAD_INCLUDE_DIR}/src/* ${EXT_INSTALL_INCLUDE_PATH}/breakpad/.
-  find ${EXT_INSTALL_INCLUDE_PATH}/breakpad/ -type f ! -name "*.h" -exec rm -rf {} \;
-  cp -R ${GIF_LIB_DIR}/libgif.so ${EXT_INSTALL_LIB_PATH}/.
-  cp -R ${GIF_LIB_DIR}/libutil.so ${EXT_INSTALL_LIB_PATH}/.
-  cp ${SQLITE_LIB_DIR}/libsqlite*.so* ${EXT_INSTALL_LIB_PATH}/.
-  cp ${SQLITE_LIB_DIR}/libsqlite*.a* ${EXT_INSTALL_LIB_PATH}/.
-else
-  cp -R ${NODE_LIB_DIR}/../libnode.*.dylib ${EXT_INSTALL_LIB_PATH}/.
-  cp -R ${NODE_LIB_DIR}/../node ${EXT_INSTALL_LIB_PATH}/.
-  find ${GIF_LIB_DIR} -name libgif*
-  cp -R ${GIF_LIB_DIR}/libgif.*.dylib ${EXT_INSTALL_LIB_PATH}/.
-  cp -R ${GIF_LIB_DIR}/libutil.*.dylib ${EXT_INSTALL_LIB_PATH}/.
-  cp ${SQLITE_LIB_DIR}/libsqlite.*.dylib ${EXT_INSTALL_LIB_PATH}/.
-  cp ${SQLITE_LIB_DIR}/libsqlite*.a* ${EXT_INSTALL_LIB_PATH}/.
-fi
-cp -R ${DUKTAPE_LIB_DIR}/*.a ${EXT_INSTALL_LIB_PATH}/.
-cp ${SPARK_WEBGL_DIR}/gles2.node ${NODE_MODULES_PATH}/.
-
-mkdir -p ${EXT_INSTALL_INCLUDE_PATH}/nanosvg
-cp ${NANOSVG_DIR}/src/nanosvgrast.h ${EXT_INSTALL_INCLUDE_PATH}/nanosvg/.
-
-mkdir -p ${EXT_INSTALL_INCLUDE_PATH}/node
-cp ${NODE_DIR}/src/node.h ${EXT_INSTALL_INCLUDE_PATH}/node/.
-cp ${NODE_DIR}/src/node_contextify_mods.h ${EXT_INSTALL_INCLUDE_PATH}/node/.
-cp ${NODE_DIR}/src/node_internals.h ${EXT_INSTALL_INCLUDE_PATH}/node/.
-cp ${NODE_DIR}/src/module_wrap.h ${EXT_INSTALL_INCLUDE_PATH}/node/.
-cp ${NODE_DIR}/src/env-inl.h ${EXT_INSTALL_INCLUDE_PATH}/node/.
-cp ${NODE_DIR}/src/node_crypto.h ${EXT_INSTALL_INCLUDE_PATH}/node/.
 
 #perform git commit
 git checkout $TRAVIS_BRANCH

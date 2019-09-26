@@ -2,6 +2,28 @@
 set -e
 #export CCACHE_RECACHE=1
 export CCACHE_DISABLE=true
+
+NODE_VER="10.15.3"
+
+#mention dirs for other externals directory
+BREAKPAD_LIB_DIR="`pwd`/breakpad-chrome_55/src/client/linux/"
+NANOSVG_DIR="`pwd`/nanosvg"
+BREAKPAD_INCLUDE_DIR="`pwd`/breakpad-chrome_55"
+NODE_DIR="`pwd`/libnode-v10.15.3"
+GIF_LIB_DIR="`pwd`/gif/.libs/"
+SQLITE_LIB_DIR="`pwd`/sqlite-autoconf-3280000/.libs"
+DUKTAPE_LIB_DIR="`pwd`/dukluv/build/"
+NODE_LIB_DIR="`pwd`/libnode-v${NODE_VER}/out/Release/obj.target"
+OPENSSL_LIB_DIR="`pwd`/openssl-1.0.2o/"
+SPARK_WEBGL_DIR="`pwd`/spark-webgl/build/Release/"
+
+#copy to external directories
+EXT_INSTALL_PATH=$PWD/artifacts/${TRAVIS_OS_NAME}
+EXT_INSTALL_LIB_PATH=${EXT_INSTALL_PATH}/lib
+EXT_INSTALL_INCLUDE_PATH=${EXT_INSTALL_PATH}/include
+EXT_INSTALL_BIN_PATH=${EXT_INSTALL_PATH}/bin
+NODE_MODULES_PATH=${EXT_INSTALL_PATH}/node_modules
+
 # Any subsequent(*) commands which fail will cause the shell script to exit immediately
 modified_component_list=()
 
@@ -34,7 +56,7 @@ libjpegturbo_build=0
 libnode_build=1
 libpng_build=0
 libxml2_build=0
-nanosvg_build=0
+nanosvg_build=1
 openssl_build=0
 orc_build=0
 osspuuid_build=0
@@ -507,6 +529,14 @@ if [ $giflib_build -eq 1 ]; then
   fi
   
   cd ..
+  if [ "$(uname)" != "Darwin" ]
+  then
+    cp -R ${GIF_LIB_DIR}/libgif.so ${EXT_INSTALL_LIB_PATH}/.
+    cp -R ${GIF_LIB_DIR}/libutil.so ${EXT_INSTALL_LIB_PATH}/.
+  else
+    cp -R ${GIF_LIB_DIR}/libgif.*.dylib ${EXT_INSTALL_LIB_PATH}/.
+    cp -R ${GIF_LIB_DIR}/libutil.*.dylib ${EXT_INSTALL_LIB_PATH}/.
+  fi
 fi
 
 #--------- FT
@@ -657,6 +687,22 @@ if [ $libnode_build -eq 1 ]; then
   then
     mv ${EXT_INSTALL_PATH}/include/unicode_old ${EXT_INSTALL_PATH}/include/unicode
   fi
+
+  mkdir -p ${EXT_INSTALL_INCLUDE_PATH}/node
+  cp ${NODE_DIR}/src/node.h ${EXT_INSTALL_INCLUDE_PATH}/node/.
+  cp ${NODE_DIR}/src/node_contextify_mods.h ${EXT_INSTALL_INCLUDE_PATH}/node/.
+  cp ${NODE_DIR}/src/node_internals.h ${EXT_INSTALL_INCLUDE_PATH}/node/.
+  cp ${NODE_DIR}/src/module_wrap.h ${EXT_INSTALL_INCLUDE_PATH}/node/.
+  cp ${NODE_DIR}/src/env-inl.h ${EXT_INSTALL_INCLUDE_PATH}/node/.
+  cp ${NODE_DIR}/src/node_crypto.h ${EXT_INSTALL_INCLUDE_PATH}/node/.
+  if [ "$(uname)" != "Darwin" ]
+  then
+    cp -R ${NODE_LIB_DIR}/libnode.so.64 ${EXT_INSTALL_LIB_PATH}/.
+    cp -R ${NODE_LIB_DIR}/../node ${EXT_INSTALL_BIN_PATH}/.
+  else
+    cp -R ${NODE_LIB_DIR}/../libnode.*.dylib ${EXT_INSTALL_LIB_PATH}/.
+    cp -R ${NODE_LIB_DIR}/../node ${EXT_INSTALL_LIB_PATH}/.
+  fi
 fi
 ##---------
 #
@@ -664,6 +710,10 @@ if [ "$(uname)" != "Darwin" ]
 then
   if [ $breakpadchrome_build -eq 1 ]; then
     ./breakpad/build.sh
+    cp -R ${BREAKPAD_LIB_DIR}/libbreakpad_client.a ${EXT_INSTALL_LIB_PATH}/.
+    mkdir -p ${EXT_INSTALL_INCLUDE_PATH}/breakpad
+    cp -R ${BREAKPAD_INCLUDE_DIR}/src/* ${EXT_INSTALL_INCLUDE_PATH}/breakpad/.
+    find ${EXT_INSTALL_INCLUDE_PATH}/breakpad/ -type f ! -name "*.h" -exec rm -rf {} \;
   fi
 fi
 #---------
@@ -673,7 +723,9 @@ if [ $nanosvg_build -eq 1 ]; then
 
   banner "NANOSVG"
 
-./nanosvg/build.sh
+  ./nanosvg/build.sh
+  mkdir -p ${EXT_INSTALL_INCLUDE_PATH}/nanosvg
+  cp ${NANOSVG_DIR}/src/nanosvgrast.h ${EXT_INSTALL_INCLUDE_PATH}/nanosvg/.
 fi
 #---------
 
@@ -683,6 +735,7 @@ if [ $dukluv_build -eq 1 ]; then
   banner "DUCKTAPE"
 
   ./dukluv/build.sh
+  cp -R ${DUKTAPE_LIB_DIR}/*.a ${EXT_INSTALL_LIB_PATH}/.
 fi
 
 #-------- spark-webgl
@@ -692,6 +745,7 @@ if [ $sparkwebgl_build -eq 1 ]; then
   cd spark-webgl
   node-gyp rebuild
   cd ..
+  cp ${SPARK_WEBGL_DIR}/gles2.node ${NODE_MODULES_PATH}/.
 fi
 
 #--------- uWebSockets
@@ -720,6 +774,14 @@ if [ $sqliteautoconf_build -eq 1 ]; then
   make -j3
   make install
   cd ..
+  if [ "$(uname)" != "Darwin" ]
+  then
+    cp ${SQLITE_LIB_DIR}/libsqlite*.so* ${EXT_INSTALL_LIB_PATH}/.
+    cp ${SQLITE_LIB_DIR}/libsqlite*.a* ${EXT_INSTALL_LIB_PATH}/.
+  else
+    cp ${SQLITE_LIB_DIR}/libsqlite.*.dylib ${EXT_INSTALL_LIB_PATH}/.
+    cp ${SQLITE_LIB_DIR}/libsqlite*.a* ${EXT_INSTALL_LIB_PATH}/.
+  fi
 fi
 
 #-------- cJSON
