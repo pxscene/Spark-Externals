@@ -45,7 +45,7 @@ else
 
   cflags="-I${SYSROOT}$includedir/freetype2"
   dynamic_libs="-lfreetype"
-  static_libs="-lfreetype -lz -lbz2"
+  static_libs="-lfreetype -L/home/travis/build/kannanmadanagopalt/Spark-Externals/extlibs/lib -lz -lbz2"
   if test "${SYSROOT}$libdir" != "/usr/lib"   &&
      test "${SYSROOT}$libdir" != "/usr/lib64" ; then
     libs_L="-L${SYSROOT}$libdir"
