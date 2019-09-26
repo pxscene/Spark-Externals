@@ -36,7 +36,7 @@ cjson_build=0
 curl_build=0
 dukluv_build=0
 fontconfig_build=0
-freetype_build=1
+freetype_build=0
 gettext_build=0
 giflib_build=0
 glib_build=0
@@ -62,7 +62,7 @@ orc_build=0
 osspuuid_build=0
 pcre_build=0
 sparkwebgl_build=0
-sqliteautoconf_build=0
+sqliteautoconf_build=1
 #this may not be needed
 uwebsockets_build=0
 xz_build=0
@@ -408,6 +408,7 @@ if [ $libpng_build -eq 1 ]; then
   cd png
   ./configure --prefix=$EXT_INSTALL_PATH
   make all "-j${make_parallel}"
+  grep -rn "__cg_png_create_info_struct" .
   make install
   cd ..
 
@@ -772,6 +773,7 @@ if [ $sqliteautoconf_build -eq 1 ]; then
   autoreconf -f -i
   ./configure --prefix=$EXT_INSTALL_PATH
   make -j3
+  grep -rn "_sqlite3_intarray_bind" .
   make install
   cd ..
   if [ "$(uname)" != "Darwin" ]
