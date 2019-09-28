@@ -72,23 +72,15 @@ zlib_build=0
 openssl_depends=("openssl")
 libpng_depends=("libpng")
 jpeg9a_depends=("jpeg9a")
-curl_depends=("curl" "openssl")
-graphite2_depends=("graphite2" "freetype")
 pcre_depends=("pcre")
 icu_depends=("icu")
 libffi_depends=("libffi")
-gettext_depends=("gettext" "pcre")
-glib_depends=("glib" "libffi")
 giflib_depends=("giflib")
 freetype_depends=("freetype")
-fontconfig_depends=("fontconfig" "freetype")
 zlib_depends=("zlib")
 libjpegturbo_depends=("libjpegturbo")
-libnode_depends=("libnode" "openssl")
-uwebsockets_depends=("uwebsockets" "openssl")
 breakpadchrome_depends=("breakpadchrome")
 dukluv_depends=("dukluv")
-sparkwebgl_depends=("sparkwebgl" "libnode")
 sqliteautoconf_depends=("sqliteautoconf")
 cjson_depends=("cjson")
 orc_depends=("orc")
@@ -96,15 +88,23 @@ nanosvg_depends=("nanosvg")
 osspuuid_depends=("osspuuid")
 xz_depends=("xz")
 libxml2_depends=("libxml2")
-libdash_depends=("libdash" "curl" "libxml2")
 gstreamer_depends=("gstreamer")
+harfbuzz_depends=("harfbuzz")
+aampbr_depends=("aampbr")
+curl_depends=("curl" "openssl")
+graphite2_depends=("graphite2" "freetype")
+gettext_depends=("gettext" "pcre")
+glib_depends=("glib" "libffi")
+fontconfig_depends=("fontconfig" "freetype")
+libnode_depends=("libnode" "openssl")
+uwebsockets_depends=("uwebsockets" "openssl")
+sparkwebgl_depends=("sparkwebgl" "libnode")
+libdash_depends=("libdash" "curl" "libxml2")
 gstpluginsbase_depends=("gstpluginsbase" "gstreamer")
 gstpluginsgood_depends=("gstpluginsgood" "gstpluginsbase")
 gstpluginsbad_depends=("gstpluginsbad" "gstpluginsbase")
 gstpluginsugly_depends=("gstpluginsugly" "gstpluginsbase")
 gstlibav_depends=("gstlibav" "gstpluginsbase")
-harfbuzz_depends=("harfbuzz")
-aampbr_depends=("aampbr")
 aamp_depends=("aamp" "libdash" "cjson" "openssl" "gstreamer" "libxml2")
 
 prepare_modified_component_list()
@@ -289,23 +289,15 @@ prepare_dependent_component_list()
   need_component_rebuild "${openssl_depends[@]}"
   need_component_rebuild "${libpng_depends[@]}"
   need_component_rebuild "${jpeg9a_depends[@]}"
-  need_component_rebuild "${curl_depends[@]}"
-  need_component_rebuild "${graphite2_depends[@]}"
   need_component_rebuild "${pcre_depends[@]}"
   need_component_rebuild "${icu_depends[@]}"
   need_component_rebuild "${libffi_depends[@]}"
-  need_component_rebuild "${gettext_depends[@]}"
-  need_component_rebuild "${glib_depends[@]}"
   need_component_rebuild "${giflib_depends[@]}"
   need_component_rebuild "${freetype_depends[@]}"
-  need_component_rebuild "${fontconfig_depends[@]}"
   need_component_rebuild "${zlib_depends[@]}"
   need_component_rebuild "${libjpegturbo_depends[@]}"
-  need_component_rebuild "${libnode_depends[@]}"
-  need_component_rebuild "${uwebsockets_depends[@]}"
   need_component_rebuild "${breakpadchrome_depends[@]}"
   need_component_rebuild "${dukluv_depends[@]}"
-  need_component_rebuild "${sparkwebgl_depends[@]}"
   need_component_rebuild "${sqliteautoconf_depends[@]}"
   need_component_rebuild "${cjson_depends[@]}"
   need_component_rebuild "${orc_depends[@]}"
@@ -313,15 +305,23 @@ prepare_dependent_component_list()
   need_component_rebuild "${osspuuid_depends[@]}"
   need_component_rebuild "${xz_depends[@]}"
   need_component_rebuild "${libxml2_depends[@]}"
-  need_component_rebuild "${libdash_depends[@]}"
   need_component_rebuild "${gstreamer_depends[@]}"
+  need_component_rebuild "${harfbuzz_depends[@]}"
+  need_component_rebuild "${aampbr_depends[@]}"
+  need_component_rebuild "${curl_depends[@]}"
+  need_component_rebuild "${graphite2_depends[@]}"
+  need_component_rebuild "${gettext_depends[@]}"
+  need_component_rebuild "${glib_depends[@]}"
+  need_component_rebuild "${fontconfig_depends[@]}"
+  need_component_rebuild "${libnode_depends[@]}"
+  need_component_rebuild "${uwebsockets_depends[@]}"
+  need_component_rebuild "${sparkwebgl_depends[@]}"
+  need_component_rebuild "${libdash_depends[@]}"
   need_component_rebuild "${gstpluginsbase_depends[@]}"
   need_component_rebuild "${gstpluginsgood_depends[@]}"
   need_component_rebuild "${gstpluginsbad_depends[@]}"
   need_component_rebuild "${gstpluginsugly_depends[@]}"
   need_component_rebuild "${gstlibav_depends[@]}"
-  need_component_rebuild "${harfbuzz_depends[@]}"
-  need_component_rebuild "${aampbr_depends[@]}"
   need_component_rebuild "${aamp_depends[@]}"
 }
 
