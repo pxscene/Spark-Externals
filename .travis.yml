@@ -22,7 +22,6 @@ before_install:
 - gcc -v && g++ -v 
 - ./ci/before_install.sh
 install:
-- ccache -s
 - ./ci/install.sh
 script:
 - ./ci/savelibs.sh
