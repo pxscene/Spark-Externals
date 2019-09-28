@@ -782,8 +782,8 @@ if [ $sqliteautoconf_build -eq 1 ]; then
     cp ${SQLITE_LIB_DIR}/libsqlite*.so* ${EXT_INSTALL_LIB_PATH}/.
     cp ${SQLITE_LIB_DIR}/libsqlite*.a* ${EXT_INSTALL_LIB_PATH}/.
   else
-    cp ${SQLITE_LIB_DIR}/libsqlite*.dylib ${EXT_INSTALL_LIB_PATH}/.
-    cp ${SQLITE_LIB_DIR}/libsqlite*.a* ${EXT_INSTALL_LIB_PATH}/.
+    cp ${SQLITE_LIB_DIR}/libsqlite* ${EXT_INSTALL_LIB_PATH}/.
+    #cp ${SQLITE_LIB_DIR}/libsqlite* ${EXT_INSTALL_LIB_PATH}/.
   fi
 fi
 
