@@ -773,8 +773,9 @@ if [ $sqliteautoconf_build -eq 1 ]; then
   autoreconf -f -i
   ./configure --prefix=$EXT_INSTALL_PATH
   make -j3
-  grep -rn "_sqlite3_intarray_bind" .
+  #grep -rn "_sqlite3_intarray_bind" .
   make install
+  ls -rlt ${SQLITE_LIB_DIR}
   cd ..
   if [ "$(uname)" != "Darwin" ]
   then
