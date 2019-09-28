@@ -408,7 +408,7 @@ if [ $libpng_build -eq 1 ]; then
   cd png
   ./configure --prefix=$EXT_INSTALL_PATH
   make all "-j${make_parallel}"
-  grep -rn "__cg_png_create_info_struct" .
+  #grep -rn "__cg_png_create_info_struct" .
   make install
   cd ..
 
