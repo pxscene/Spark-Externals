@@ -1,0 +1,13 @@
+prefix=/Users/travis/build/pxscene/Spark-Externals/extlibs
+exec_prefix=/Users/travis/build/pxscene/Spark-Externals/extlibs
+libdir=/Users/travis/build/pxscene/Spark-Externals/extlibs/lib
+includedir=/Users/travis/build/pxscene/Spark-Externals/extlibs/include
+
+Name: harfbuzz
+Description: HarfBuzz text shaping library ICU integration
+Version: 1.7.4
+
+Requires: harfbuzz
+Requires.private: icu-uc
+Libs: -L${libdir} -lharfbuzz-icu
+Cflags: -I${includedir}/harfbuzz
