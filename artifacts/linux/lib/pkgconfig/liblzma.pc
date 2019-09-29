@@ -1,0 +1,19 @@
+#
+# Author: Lasse Collin
+#
+# This file has been put into the public domain.
+# You can do whatever you want with this file.
+#
+
+prefix=/home/travis/build/pxscene/Spark-Externals/extlibs
+exec_prefix=/home/travis/build/pxscene/Spark-Externals/extlibs
+libdir=/home/travis/build/pxscene/Spark-Externals/extlibs/lib
+includedir=/home/travis/build/pxscene/Spark-Externals/extlibs/include
+
+Name: liblzma
+Description: General purpose data compression library
+URL: http://tukaani.org/xz/
+Version: 5.2.2
+Cflags: -I${includedir}
+Libs: -L${libdir} -llzma
+Libs.private: -pthread 
