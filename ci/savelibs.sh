@@ -14,39 +14,12 @@ checkError()
   fi
 }
 
-NODE_VER="10.15.3"
-
-#mention dirs for other externals directory
-NODE_LIB_DIR="`pwd`/libnode-v${NODE_VER}/out/Release/obj.target"
-OPENSSL_LIB_DIR="`pwd`/openssl-1.0.2o/"
-SPARK_WEBGL_DIR="`pwd`/spark-webgl/build/Release/"
-EXT_LIBS_DIR=`pwd`/extlibs/lib
-EXT_INCLUDE_DIR=`pwd`/extlibs/include
-
-#copy to external directories
+##copy to external directories
 EXT_INSTALL_PATH=$PWD/artifacts/${TRAVIS_OS_NAME}
 EXT_INSTALL_LIB_PATH=${EXT_INSTALL_PATH}/lib
 EXT_INSTALL_INCLUDE_PATH=${EXT_INSTALL_PATH}/include
 EXT_INSTALL_BIN_PATH=${EXT_INSTALL_PATH}/bin
 NODE_MODULES_PATH=${EXT_INSTALL_PATH}/node_modules
-
-if [ "$(uname)" != "Darwin" ]
-then
-  cp -R ${NODE_LIB_DIR}/libnode.so.64 ${EXT_INSTALL_LIB_PATH}/.
-  cp -R ${NODE_LIB_DIR}/../node ${EXT_INSTALL_BIN_PATH}/.
-  cp -R ${OPENSSL_LIB_DIR}/libcrypto.so.1.0.0 ${EXT_INSTALL_LIB_PATH}/.
-  cp -R ${OPENSSL_LIB_DIR}/libssl.so.1.0.0 ${EXT_INSTALL_LIB_PATH}/.
-else
-  cp -R ${NODE_LIB_DIR}/../libnode.*.dylib ${EXT_INSTALL_LIB_PATH}/.
-  cp -R ${NODE_LIB_DIR}/../node ${EXT_INSTALL_LIB_PATH}/.
-  cp -R ${OPENSSL_LIB_DIR}/libcrypto.*.dylib ${EXT_INSTALL_LIB_PATH}/.
-  cp -R ${OPENSSL_LIB_DIR}/libssl.*.dylib ${EXT_INSTALL_LIB_PATH}/.
-fi
-cp ${SPARK_WEBGL_DIR}/gles2.node ${NODE_MODULES_PATH}/.
-
-#copy all externals dirs
-cp -R ${EXT_LIBS_DIR}/* ${EXT_INSTALL_LIB_PATH}/.
-cp -R ${EXT_INCLUDE_DIR}/* ${EXT_INSTALL_INCLUDE_PATH}/.
 
 #perform git commit
 git checkout $TRAVIS_BRANCH
