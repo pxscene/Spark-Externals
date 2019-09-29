@@ -43,12 +43,3 @@ then
   sudo /usr/sbin/DevToolsSecurity --enable
   cmake --version
 fi
-
-if [ "$TRAVIS_OS_NAME" = "osx" ] ;
-then
-  if ( [ "$TRAVIS_EVENT_TYPE" = "push" ] || [ "$TRAVIS_EVENT_TYPE" = "pull_request" ] ) && [ -z "${TRAVIS_TAG}" ]
-  then
-    brew install ccache
-    ls -al $HOME/.ccache
-  fi
-fi
