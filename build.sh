@@ -327,8 +327,8 @@ prepare_dependent_component_list()
 echo "Preparing modified components list ...."
 prepare_modified_component_list
 prepare_build_data
-#echo "Preparing dependent components list ...."
-#prepare_dependent_component_list
+echo "Preparing dependent components list ...."
+prepare_dependent_component_list
 
 banner() {
   msg="# $* #"
