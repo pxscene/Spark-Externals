@@ -490,7 +490,7 @@ fi
 if [ $giflib_build -eq 1 ]; then
   banner "GIF"
   
-  cd gif
+  cd giflib-5.1.9
   if [ "$(uname)" == "Darwin" ]; then
   
   [ -d patches ] || mkdir -p patches
@@ -527,6 +527,8 @@ if [ $giflib_build -eq 1 ]; then
       cp libutil.so .libs/libutil.so
   fi
   fi
+
+  cp gif_lib.h ${EXT_INSTALL_INCLUDE_PATH}/.
   
   cd ..
   if [ "$(uname)" != "Darwin" ]
