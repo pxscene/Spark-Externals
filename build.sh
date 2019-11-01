@@ -52,7 +52,7 @@ jpeg9a_build=0
 libdash_build=0
 libffi_build=0
 libjpegturbo_build=0
-libnode_build=0
+libnode_build=1
 libpng_build=0
 libxml2_build=0
 nanosvg_build=0
@@ -60,7 +60,7 @@ openssl_build=0
 orc_build=0
 osspuuid_build=0
 pcre_build=0
-sparkwebgl_build=0
+sparkwebgl_build=1
 sqliteautoconf_build=0
 #this may not be needed
 uwebsockets_build=0
