@@ -1047,223 +1047,6 @@ index f92446f..d02c098 100755
      if (r != -1)
        return r;
      if (errno != ENOSYS)
-diff --git a/libnode-v10.15.3/lib/dns.js b/libnode-v10.15.3/lib/dns.js
-index f90d7c1a5..b151f530c 100755
---- a/libnode-v10.15.3/lib/dns.js
-+++ b/libnode-v10.15.3/lib/dns.js
-@@ -69,15 +69,30 @@ function onlookupall(err, addresses) {
-   }
- 
-   var family = this.family;
-+  /* MODIFIED CODE BEGIN */
-+  var ipV4Addresses = [];
-+  var ipV4count = 0;
-+  var ipV6Addresses = []
-+  var ipV6count = 0;
-+  var result = {}
-   for (var i = 0; i < addresses.length; i++) {
-     const addr = addresses[i];
--    addresses[i] = {
--      address: addr,
--      family: family || (isIPv4(addr) ? 4 : 6)
--    };
-+    var addrfamily = family || (isIPv4(addr) ? 4 : 6)
-+    if (addrfamily == 4) {
-+      ipV4Addresses[ipV4count] = {address: addr, family: addrfamily}
-+      ipV4count++;
-+    }
-+    else {
-+      ipV6Addresses[ipV6count] = {address: addr, family: addrfamily}
-+      ipV6count++;
-+    }
-   }
--
--  this.callback(null, addresses);
-+  result['v4address'] = ipV4Addresses
-+  result['v4count'] = ipV4count
-+  result['v6address'] = ipV6Addresses
-+  result['v6count'] = ipV6count
-+  this.callback(null, result);
-+  /* MODIFIED CODE END */
- }
- 
- 
-diff --git a/libnode-v10.15.3/lib/net.js b/libnode-v10.15.3/lib/net.js
-index e40aaa870..8950dba55 100755
---- a/libnode-v10.15.3/lib/net.js
-+++ b/libnode-v10.15.3/lib/net.js
-@@ -812,6 +812,116 @@ function checkBindError(err, port, handle) {
-   return err;
- }
- 
-+/* MODIFIED CODE BEGIN */
-+function internalConnectMultipleAddress(
-+  self, address, port, localAddress, localPort) {
-+  var ipV4addresses = address['v4address']
-+  var ipv4count =  address['v4count']
-+  var ipV6addresses = address['v6address']
-+  var ipv6count = address['v6count']
-+  var tempLocalAddress = "";
-+  var bindSucceeded = true;
-+  var connectSucceeded = false;
-+  var err;
-+
-+  // IPV6 bind
-+  bindSucceeded = true;
-+  if (localAddress || localPort) {
-+    tempLocalAddress = localAddress || '::';
-+    err = self._handle.bind6(tempLocalAddress, localPort);
-+    debug('binding to localAddress: %s and localPort: %d (addressType: 6)',
-+          tempLocalAddress, localPort);
-+
-+    err = checkBindError(err, localPort, self._handle);
-+    if (err) {
-+      console.log("Bind error for IPV6 : " + err + " happened for " + tempLocalAddress + " and port " + localPort);
-+      bindSucceeded = false;
-+    }
-+  }
-+
-+  // IPV6 connect
-+  connectSucceeded = false;
-+  if (true == bindSucceeded) {
-+    for (var i=0; i<ipv6count; i++)
-+    {
-+      connectSucceeded = internalConnectWithReturn(self, ipV6addresses[i].address, port, ipV6addresses[i].family, tempLocalAddress, localPort);
-+      if (true == connectSucceeded)
-+        break;
-+    }
-+  }
-+
-+  // try for ipv4 if ipv6 connect fails
-+  if (false == connectSucceeded) {
-+
-+    bindSucceeded = true;
-+    // IPV4 bind 
-+    if (localAddress || localPort) {
-+      tempLocalAddress = localAddress || '0.0.0.0';
-+      err = self._handle.bind(tempLocalAddress, localPort);
-+      debug('binding to localAddress: %s and localPort: %d (addressType: 4)',
-+            tempLocalAddress, localPort);
-+
-+      err = checkBindError(err, localPort, self._handle);
-+      if (err) {
-+        console.log("Bind error for IPV4 : " + err + " happened for " + tempLocalAddress + " and port " + localPort);
-+        bindSucceeded = false;
-+      }
-+    }
-+
-+    connectSucceeded = false;
-+    if (true == bindSucceeded) {
-+      for (var i=0; i<ipv4count; i++)
-+      {
-+        connectSucceeded = internalConnectWithReturn(self, ipV4addresses[i].address, port, ipV4addresses[i].family, tempLocalAddress, localPort);
-+        if (true == connectSucceeded)
-+          break;
-+      }
-+    }
-+  }
-+
-+  if ((false == bindSucceeded) || (false == connectSucceeded))
-+  {
-+    self.destroy();
-+  }
-+}
-+
-+function internalConnectWithReturn(self, address, port, addressType, localAddress, localPort) 
-+{
-+  assert(self.connecting);
-+  var ret = false;
-+  var err;
-+
-+  if (addressType === 6 || addressType === 4) {
-+    const req = new TCPConnectWrap();
-+    req.oncomplete = afterConnect;
-+    req.address = address;
-+    req.port = port;
-+    req.localAddress = localAddress;
-+    req.localPort = localPort;
-+
-+    if (addressType === 4)
-+      err = self._handle.connect(req, address, port);
-+    else
-+      err = self._handle.connect6(req, address, port);
-+  }
-+
-+  if (err) {
-+    var sockname = self._getsockname();
-+    var details;
-+
-+    if (sockname) {
-+      details = sockname.address + ':' + sockname.port;
-+    }
-+
-+    console.log("Connect error happened : " + err + " , " + details + " , " + address + ":"  + port + " ,family: " + addressType); 
-+  }
-+  else
-+  {
-+    ret = true;
-+  }
-+  return ret;
-+}
-+/* MODIFIED CODE END */
- 
- function internalConnect(
-   self, address, port, addressType, localAddress, localPort) {
-@@ -974,11 +1084,13 @@ function lookupAndConnect(self, options) {
- 
- 
-   if (dns === undefined) dns = require('dns');
-+  /* MODIFIED CODE BEGIN */
-   var dnsopts = {
-     family: options.family,
--    hints: options.hints || 0
-+    hints: options.hints || 0,
-   };
--
-+  dnsopts.all = true;
-+  /* MODIFIED CODE END */
-   if (process.platform !== 'win32' &&
-       dnsopts.family !== 4 &&
-       dnsopts.family !== 6 &&
-@@ -1008,7 +1120,9 @@ function lookupAndConnect(self, options) {
-         err.port = options.port;
-         err.message = err.message + ' ' + options.host + ':' + options.port;
-         process.nextTick(connectErrorNT, self, err);
--      } else if (addressType !== 4 && addressType !== 6) {
-+        /* MODIFIED CODE BEGIN */
-+      } else if ((false == dnsopts.all) && addressType !== 4 && addressType !== 6) {
-+        /* MODIFIED CODE END */
-         err = new ERR_INVALID_ADDRESS_FAMILY(addressType);
-         err.host = options.host;
-         err.port = options.port;
-@@ -1016,11 +1130,22 @@ function lookupAndConnect(self, options) {
-         process.nextTick(connectErrorNT, self, err);
-       } else {
-         self._unrefTimer();
--        defaultTriggerAsyncIdScope(
--          self[async_id_symbol],
--          internalConnect,
--          self, ip, port, addressType, localAddress, localPort
--        );
-+        /* MODIFIED CODE BEGIN */
-+        if (dnsopts.all) {
-+          defaultTriggerAsyncIdScope(
-+            self[async_id_symbol],
-+            internalConnectMultipleAddress,
-+            self, ip, port, localAddress, localPort
-+          );
-+        }
-+        else {
-+          defaultTriggerAsyncIdScope(
-+            self[async_id_symbol],
-+            internalConnect,
-+            self, ip, port, addressType, localAddress, localPort
-+          );
-+        }
-+        /* MODIFIED CODE END */
-       }
-     });
-   });
 diff --git a/libnode-v10.15.3/src/env.h b/libnode-v10.15.3/src/env.h
 index 66c69e8d0..e229a8fbd 100755
 --- a/libnode-v10.15.3/src/env.h
@@ -1453,3 +1236,369 @@ index fd8d04540..c4286d459 100755
  }
  
  void NodePlatform::CallDelayedOnForegroundThread(Isolate* isolate,
+diff --git a/libnode-v10.15.3/lib/net.js b/libnode-v10.15.3/lib/net.js
+index e40aaa870..793014f12 100755
+--- a/libnode-v10.15.3/lib/net.js
++++ b/libnode-v10.15.3/lib/net.js
+@@ -812,6 +812,119 @@ function checkBindError(err, port, handle) {
+   return err;
+ }
+ 
++/* MODIFIED CODE BEGIN */
++function internalConnectMultipleAddress(
++  self, address, port, localAddress, localPort) {
++  var ipV4addresses = address['v4address']
++  var ipv4count =  address['v4count']
++  var ipV6addresses = address['v6address']
++  var ipv6count = address['v6count']
++  var tempLocalAddress = "";
++  var bindSucceeded = true;
++  var connectSucceeded = false;
++  var err;
++
++  // IPV6 bind
++  bindSucceeded = true;
++  if (localAddress || localPort) {
++    tempLocalAddress = localAddress || '::';
++    err = self._handle.bind6(tempLocalAddress, localPort);
++    debug('binding to localAddress: %s and localPort: %d (addressType: 6)',
++          tempLocalAddress, localPort);
++
++    err = checkBindError(err, localPort, self._handle);
++    if (err) {
++      console.log("Bind error for IPV6 : " + err + " happened for " + tempLocalAddress + " and port " + localPort);
++      bindSucceeded = false;
++    }
++  }
++
++  // IPV6 connect
++  connectSucceeded = false;
++  if (true == bindSucceeded) {
++    for (var i=0; i<ipv6count; i++)
++    {
++      connectSucceeded = internalConnectWithReturn(self, ipV6addresses[i].address, port, ipV6addresses[i].family, tempLocalAddress, localPort);
++      if (true == connectSucceeded)
++        break;
++    }
++  }
++
++  // try for ipv4 if ipv6 connect fails
++  if (false == connectSucceeded) {
++    self._handle.reset(); //call to prepare IPV4 socket
++
++    bindSucceeded = true;
++    // IPV4 bind 
++    if (localAddress || localPort) {
++      tempLocalAddress = localAddress || '0.0.0.0';
++      err = self._handle.bind(tempLocalAddress, localPort);
++      debug('binding to localAddress: %s and localPort: %d (addressType: 4)',
++            tempLocalAddress, localPort);
++
++      err = checkBindError(err, localPort, self._handle);
++      if (err) {
++        console.log("Bind error for IPV4 : " + err + " happened for " + tempLocalAddress + " and port " + localPort);
++        bindSucceeded = false;
++      }
++    }
++
++    connectSucceeded = false;
++    if (true == bindSucceeded) {
++      for (var i=0; i<ipv4count; i++)
++      {
++        connectSucceeded = internalConnectWithReturn(self, ipV4addresses[i].address, port, ipV4addresses[i].family, tempLocalAddress, localPort);
++        if (true == connectSucceeded)
++          break;
++      }
++    }
++  }
++
++  if ((false == bindSucceeded) || (false == connectSucceeded))
++  {
++    var details = "Address: " + localAddress + ", port: " + localPort
++    console.log("Multiple address connection failed connect - " + address + ":" + port + " " + details);
++    self.destroy();
++  }
++}
++
++function internalConnectWithReturn(self, address, port, addressType, localAddress, localPort) 
++{
++  assert(self.connecting);
++  var ret = false;
++  var err;
++
++  if (addressType === 6 || addressType === 4) {
++    const req = new TCPConnectWrap();
++    req.oncomplete = afterConnectAll;
++    req.address = address;
++    req.port = port;
++    req.localAddress = localAddress;
++    req.localPort = localPort;
++
++    if (addressType === 4)
++      err = self._handle.connect(req, address, port);
++    else
++      err = self._handle.connect6(req, address, port);
++  }
++
++  if (err) {
++    var sockname = self._getsockname();
++    var details;
++
++    if (sockname) {
++      details = sockname.address + ':' + sockname.port;
++    }
++
++    console.log("Connect error happened : " + err + " , " + details + " , " + address + ":"  + port + " ,family: " + addressType); 
++  }
++  else
++  {
++    ret = true;
++  }
++  return ret;
++}
++/* MODIFIED CODE END */
+ 
+ function internalConnect(
+   self, address, port, addressType, localAddress, localPort) {
+@@ -974,11 +1087,13 @@ function lookupAndConnect(self, options) {
+ 
+ 
+   if (dns === undefined) dns = require('dns');
++  /* MODIFIED CODE BEGIN */
+   var dnsopts = {
+     family: options.family,
+-    hints: options.hints || 0
++    hints: options.hints || 0,
+   };
+-
++  dnsopts.all = true;
++  /* MODIFIED CODE END */
+   if (process.platform !== 'win32' &&
+       dnsopts.family !== 4 &&
+       dnsopts.family !== 6 &&
+@@ -1008,7 +1123,9 @@ function lookupAndConnect(self, options) {
+         err.port = options.port;
+         err.message = err.message + ' ' + options.host + ':' + options.port;
+         process.nextTick(connectErrorNT, self, err);
+-      } else if (addressType !== 4 && addressType !== 6) {
++        /* MODIFIED CODE BEGIN */
++      } else if ((false == dnsopts.all) && addressType !== 4 && addressType !== 6) {
++        /* MODIFIED CODE END */
+         err = new ERR_INVALID_ADDRESS_FAMILY(addressType);
+         err.host = options.host;
+         err.port = options.port;
+@@ -1016,11 +1133,22 @@ function lookupAndConnect(self, options) {
+         process.nextTick(connectErrorNT, self, err);
+       } else {
+         self._unrefTimer();
+-        defaultTriggerAsyncIdScope(
+-          self[async_id_symbol],
+-          internalConnect,
+-          self, ip, port, addressType, localAddress, localPort
+-        );
++        /* MODIFIED CODE BEGIN */
++        if (dnsopts.all) {
++          defaultTriggerAsyncIdScope(
++            self[async_id_symbol],
++            internalConnectMultipleAddress,
++            self, ip, port, localAddress, localPort
++          );
++        }
++        else {
++          defaultTriggerAsyncIdScope(
++            self[async_id_symbol],
++            internalConnect,
++            self, ip, port, addressType, localAddress, localPort
++          );
++        }
++        /* MODIFIED CODE END */
+       }
+     });
+   });
+@@ -1107,6 +1235,41 @@ function afterConnect(status, handle, req, readable, writable) {
+   }
+ }
+ 
++/* MODIFIED CODE BEGIN */
++function afterConnectAll(status, handle, req, readable, writable) {
++  var self = handle[owner_symbol];
++
++  // callback may come after call to destroy
++  if (self.destroyed) {
++    return;
++  }
++
++  debug('afterConnectAll');
++
++  assert(self.connecting);
++
++  if (status === 0) {
++    self.connecting = false;
++    self._sockname = null;
++    self.readable = readable;
++    if (!self._writableState.ended)
++      self.writable = writable;
++    self._unrefTimer();
++
++    self.emit('connect');
++    self.emit('ready');
++
++    // start the first read, or get an immediate EOF.
++    // this doesn't actually consume any bytes, because len=0.
++    if (readable && !self.isPaused())
++      self.read(0);
++
++  } else {
++      if (util === undefined) util = require('util');
++      const code = util.getSystemErrorName(status);
++  }
++}
++/* MODIFIED CODE END */
+ 
+ function Server(options, connectionListener) {
+   if (!(this instanceof Server))
+diff --git a/libnode-v10.15.3/lib/dns.js b/libnode-v10.15.3/lib/dns.js
+index f90d7c1a5..b151f530c 100755
+--- a/libnode-v10.15.3/lib/dns.js
++++ b/libnode-v10.15.3/lib/dns.js
+@@ -69,15 +69,30 @@ function onlookupall(err, addresses) {
+   }
+ 
+   var family = this.family;
++  /* MODIFIED CODE BEGIN */
++  var ipV4Addresses = [];
++  var ipV4count = 0;
++  var ipV6Addresses = []
++  var ipV6count = 0;
++  var result = {}
+   for (var i = 0; i < addresses.length; i++) {
+     const addr = addresses[i];
+-    addresses[i] = {
+-      address: addr,
+-      family: family || (isIPv4(addr) ? 4 : 6)
+-    };
++    var addrfamily = family || (isIPv4(addr) ? 4 : 6)
++    if (addrfamily == 4) {
++      ipV4Addresses[ipV4count] = {address: addr, family: addrfamily}
++      ipV4count++;
++    }
++    else {
++      ipV6Addresses[ipV6count] = {address: addr, family: addrfamily}
++      ipV6count++;
++    }
+   }
+-
+-  this.callback(null, addresses);
++  result['v4address'] = ipV4Addresses
++  result['v4count'] = ipV4count
++  result['v6address'] = ipV6Addresses
++  result['v6count'] = ipV6count
++  this.callback(null, result);
++  /* MODIFIED CODE END */
+ }
+ 
+ 
+diff --git a/libnode-v10.15.3/lib/_tls_wrap.js b/libnode-v10.15.3/lib/_tls_wrap.js
+index 9bfdd4062..0dc161af9 100755
+--- a/libnode-v10.15.3/lib/_tls_wrap.js
++++ b/libnode-v10.15.3/lib/_tls_wrap.js
+@@ -345,16 +345,16 @@ function TLSSocket(socket, opts) {
+ }
+ util.inherits(TLSSocket, net.Socket);
+ exports.TLSSocket = TLSSocket;
+-
++/* MODIFIED CODE BEGIN */
+ var proxiedMethods = [
+-  'ref', 'unref', 'open', 'bind', 'listen', 'connect', 'bind6',
++  'ref', 'unref', 'open', 'bind', 'listen', 'connect', 'bind6', 'reset',
+   'connect6', 'getsockname', 'getpeername', 'setNoDelay', 'setKeepAlive',
+   'setSimultaneousAccepts', 'setBlocking',
+ 
+   // PipeWrap
+   'setPendingInstances'
+ ];
+-
++/* MODIFIED CODE END */
+ // Proxy HandleWrap, PipeWrap and TCPWrap methods
+ function makeMethodProxy(name) {
+   return function methodProxy(...args) {
+diff --git a/libnode-v10.15.3/src/stream_wrap.h b/libnode-v10.15.3/src/stream_wrap.h
+index 98f0ca4ac..7924678ca 100755
+--- a/libnode-v10.15.3/src/stream_wrap.h
++++ b/libnode-v10.15.3/src/stream_wrap.h
+@@ -60,6 +60,12 @@ class LibuvStreamWrap : public HandleWrap, public StreamBase {
+     return stream_;
+   }
+ 
++/* MODIFIED CODE BEGIN */
++  void update_stream(uv_stream_t* s) {
++    stream_ = s;
++  }
++/* MODIFIED CODE END */
++
+   inline bool is_named_pipe() const {
+     return stream()->type == UV_NAMED_PIPE;
+   }
+@@ -108,8 +114,9 @@ class LibuvStreamWrap : public HandleWrap, public StreamBase {
+ 
+   static void AfterUvWrite(uv_write_t* req, int status);
+   static void AfterUvShutdown(uv_shutdown_t* req, int status);
+-
+-  uv_stream_t* const stream_;
++  /* MODIFIED CODE BEGIN */
++  uv_stream_t* stream_;
++  /* MODIFIED CODE END */
+ 
+ #ifdef _WIN32
+   // We don't always have an FD that we could look up on the stream_
+diff --git a/libnode-v10.15.3/src/tcp_wrap.cc b/libnode-v10.15.3/src/tcp_wrap.cc
+index a6cc01f12..c66a0cfcc 100755
+--- a/libnode-v10.15.3/src/tcp_wrap.cc
++++ b/libnode-v10.15.3/src/tcp_wrap.cc
+@@ -93,6 +93,9 @@ void TCPWrap::Initialize(Local<Object> target,
+   env->SetProtoMethod(t, "open", Open);
+   env->SetProtoMethod(t, "bind", Bind);
+   env->SetProtoMethod(t, "listen", Listen);
++/* MODIFIED CODE BEGIN*/
++  env->SetProtoMethod(t, "reset",Reset);
++/* MODIFIED CODE END */
+   env->SetProtoMethod(t, "connect", Connect);
+   env->SetProtoMethod(t, "bind6", Bind6);
+   env->SetProtoMethod(t, "connect6", Connect6);
+@@ -274,6 +277,22 @@ void TCPWrap::Listen(const FunctionCallbackInfo<Value>& args) {
+   args.GetReturnValue().Set(err);
+ }
+ 
++/* MODIFIED CODE BEGIN */
++void TCPWrap::Reset(const FunctionCallbackInfo<Value>& args) {
++  TCPWrap* wrap;
++  ASSIGN_OR_RETURN_UNWRAP(&wrap,
++                          args.Holder(),
++                          args.GetReturnValue().Set(UV_EBADF));
++  Environment* env = wrap->env();
++  int err = uv_tcp_init(env->event_loop(), &wrap->handle_);
++  wrap->update_stream(reinterpret_cast<uv_stream_t*> (&wrap->handle_));
++  wrap->handle_.data = wrap;
++  //err = uv_tcp_init(env->event_loop(), &wrap->handle_);
++  CHECK_EQ(err, 0);  // How do we proxy this error up to javascript?
++                   // Suggestion: uv_tcp_init() returns void.
++  args.GetReturnValue().Set(err);
++}
++/* MODIFIED CODE END */
+ 
+ void TCPWrap::Connect(const FunctionCallbackInfo<Value>& args) {
+   CHECK(args[2]->IsUint32());
+diff --git a/libnode-v10.15.3/src/tcp_wrap.h b/libnode-v10.15.3/src/tcp_wrap.h
+index 3cbeae6d6..67bf832a0 100755
+--- a/libnode-v10.15.3/src/tcp_wrap.h
++++ b/libnode-v10.15.3/src/tcp_wrap.h
+@@ -79,6 +79,9 @@ class TCPWrap : public ConnectionWrap<TCPWrap, uv_tcp_t> {
+   static void Connect(const v8::FunctionCallbackInfo<v8::Value>& args,
+       std::function<int(const char* ip_address, T* addr)> uv_ip_addr);
+   static void Open(const v8::FunctionCallbackInfo<v8::Value>& args);
++/* MODIFIED CODE BEGIN */
++  static void Reset(const v8::FunctionCallbackInfo<v8::Value>& args);
++/* MODIFIED CODE END */
+ 
+ #ifdef _WIN32
+   static void SetSimultaneousAccepts(
