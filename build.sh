@@ -698,6 +698,8 @@ if [ $libnode_build -eq 1 ]; then
   cp ${NODE_DIR}/src/module_wrap.h ${EXT_INSTALL_INCLUDE_PATH}/node/.
   cp ${NODE_DIR}/src/env-inl.h ${EXT_INSTALL_INCLUDE_PATH}/node/.
   cp ${NODE_DIR}/src/env.h ${EXT_INSTALL_INCLUDE_PATH}/node/.
+  cp ${NODE_DIR}/src/stream_wrap.h ${EXT_INSTALL_INCLUDE_PATH}/node/.
+  cp ${NODE_DIR}/src/tcp_wrap.h ${EXT_INSTALL_INCLUDE_PATH}/node/.
   cp ${NODE_DIR}/src/node_crypto.h ${EXT_INSTALL_INCLUDE_PATH}/node/.
   if [ "$(uname)" != "Darwin" ]
   then
