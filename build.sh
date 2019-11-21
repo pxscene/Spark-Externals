@@ -16,6 +16,7 @@ NODE_LIB_DIR="`pwd`/libnode-v${NODE_VER}/out/Release/obj.target"
 OPENSSL_LIB_DIR="`pwd`/openssl-1.0.2o/"
 SPARK_WEBGL_DIR="`pwd`/spark-webgl/build/Release/"
 
+
 #copy to external directories
 EXT_INSTALL_PATH=$PWD/artifacts/${TRAVIS_OS_NAME}
 EXT_INSTALL_LIB_PATH=${EXT_INSTALL_PATH}/lib
