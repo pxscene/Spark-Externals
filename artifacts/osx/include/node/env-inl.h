@@ -262,11 +262,23 @@ inline void Environment::ImmediateInfo::ref_count_dec(uint32_t decrement) {
 }
 
 inline Environment::TickInfo::TickInfo(v8::Isolate* isolate)
-    : fields_(isolate, kFieldsCount) {}
+/* MODIFIED CODE BEGIN */
+   {
+  for (int i = 0; i < kFieldsCount; ++i)
+    fields_[i] = 0;
+/* MODIFIED CODE END */
+}
 
-inline AliasedBuffer<uint8_t, v8::Uint8Array>& Environment::TickInfo::fields() {
+/* MODIFIED CODE BEGIN */
+//inline AliasedBuffer<uint8_t, v8::Uint8Array>& Environment::TickInfo::fields() {
+inline uint32_t* Environment::TickInfo::fields() {
   return fields_;
 }
+
+inline int Environment::TickInfo::fields_count() const {
+  return kFieldsCount;
+}
+/* MODIFIED CODE END */
 
 inline bool Environment::TickInfo::has_scheduled() const {
   return fields_[kHasScheduled] == 1;
