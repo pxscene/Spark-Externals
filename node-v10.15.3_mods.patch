@@ -1602,3 +1602,47 @@ index 834db64..0c108bd 100755
  if defined openssl_no_asm   set configure_flags=%configure_flags% --openssl-no-asm
  if defined DEBUG_HELPER     set configure_flags=%configure_flags% --verbose
  
+diff --git a/libnode-v10.15.3/deps/v8/src/builtins/builtins-function.cc b/libnode-v10.15.3/deps/v8/src/builtins/builtins-function.cc
+index df1dc19..d7d5bbf 100755
+--- a/libnode-v10.15.3/deps/v8/src/builtins/builtins-function.cc
++++ b/libnode-v10.15.3/deps/v8/src/builtins/builtins-function.cc
+@@ -12,6 +12,12 @@
+ #include "src/objects-inl.h"
+ #include "src/objects/api-callbacks.h"
+ #include "src/string-builder.h"
++/* MODIFIED CODE BEGIN */
++#include "src/api.h"
++#include "src/handles.h"
++
++using Utils = v8::Utils;
++/* MODIFIED CODE END */
+ 
+ namespace v8 {
+ namespace internal {
+@@ -35,6 +41,10 @@ MaybeHandle<Object> CreateDynamicFunction(Isolate* isolate,
+   }
+ 
+   // Build the source string.
++/* MODIFIED CODE BEGIN */
++  v8::Local<v8::Context> callingCtx = reinterpret_cast<v8::Isolate*>(isolate)->GetCallingContext();
++  Handle<Context> callingCtxHandle = Utils::OpenHandle(*callingCtx);
++/* MODIFIED CODE END */
+   Handle<String> source;
+   int parameters_end_pos = kNoSourcePosition;
+   {
+@@ -103,12 +113,14 @@ MaybeHandle<Object> CreateDynamicFunction(Isolate* isolate,
+   // come from here.
+   Handle<JSFunction> function;
+   {
++/* MODIFIED CODE BEGIN */
+     ASSIGN_RETURN_ON_EXCEPTION(
+         isolate, function,
+         Compiler::GetFunctionFromString(
+-            handle(target->native_context(), isolate), source,
++            handle(*callingCtxHandle, isolate), source,
+             ONLY_SINGLE_FUNCTION_LITERAL, parameters_end_pos),
+         Object);
++/* MODIFIED CODE END */
+     Handle<Object> result;
+     ASSIGN_RETURN_ON_EXCEPTION(
+         isolate, result,
