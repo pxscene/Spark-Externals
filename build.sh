@@ -28,15 +28,15 @@ NODE_MODULES_PATH=${EXT_INSTALL_PATH}/node_modules
 modified_component_list=()
 
 #build flags
-artifacts_build=1
+artifacts_build=0
 aampbr_build=0
 aamp_build=0
-breakpadchrome_build=1
-cjson_build=1
-curl_build=1
+breakpadchrome_build=0
+cjson_build=0
+curl_build=0
 dukluv_build=0
-fontconfig_build=1
-freetype_build=1
+fontconfig_build=0
+freetype_build=0
 gettext_build=0
 giflib_build=0
 glib_build=0
@@ -49,15 +49,15 @@ gstpluginsugly_build=0
 gstreamer_build=0
 harfbuzz_build=0
 icu_build=0
-jpeg9a_build=1
+jpeg9a_build=0
 libdash_build=0
-libffi_build=1
-libjpegturbo_build=1
+libffi_build=0
+libjpegturbo_build=0
 libnode_build=1
-libpng_build=1
+libpng_build=0
 libxml2_build=0
-nanosvg_build=1
-openssl_build=1
+nanosvg_build=0
+openssl_build=0
 orc_build=0
 osspuuid_build=0
 pcre_build=0
@@ -66,7 +66,7 @@ sqliteautoconf_build=0
 #this may not be needed
 uwebsockets_build=0
 xz_build=0
-zlib_build=1
+zlib_build=0
 
 #depends information
 openssl_depends=("openssl")
