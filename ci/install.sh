@@ -1,5 +1,6 @@
 #!/bin/sh
 
+
 mkdir $TRAVIS_BUILD_DIR/logs
 touch $TRAVIS_BUILD_DIR/logs/build_logs
 BUILDLOGS=$TRAVIS_BUILD_DIR/logs/build_logs
