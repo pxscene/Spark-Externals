@@ -265,7 +265,8 @@ class NODE_EXTERN MultiIsolatePlatform : public v8::Platform {
 
 /*MODIFIED CODE BEGIN*/
 #if HAVE_INSPECTOR
-NODE_EXTERN void InspectorStart(Environment* env, const char* path, MultiIsolatePlatform* platform);
+NODE_EXTERN void InspectorStart(Environment* env, const char* path, const char* address, int port);
+NODE_EXTERN void InspectorStop(Environment* env);
 #endif
 /*MODIFIED CODE END*/
 
