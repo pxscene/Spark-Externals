@@ -29,8 +29,8 @@ modified_component_list=()
 
 #build flags
 artifacts_build=0
-aampbr_build=0
-aamp_build=0
+aampbr_build=1
+aamp_build=1
 breakpadchrome_build=0
 cjson_build=0
 curl_build=0
