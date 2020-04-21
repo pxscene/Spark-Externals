@@ -109,6 +109,7 @@ aamp_depends=("aamp" "libdash" "cjson" "openssl" "gstreamer" "libxml2")
 
 prepare_modified_component_list()
 {
+  git show --pretty="format:" --name-only HEAD
   gitoutput=`git show --pretty="format:" --name-only HEAD`
   SAVEIFS=$IFS   # Save current IFS
   IFS=$'\n'      # Change IFS to new line
