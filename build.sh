@@ -29,8 +29,8 @@ modified_component_list=()
 
 #build flags
 artifacts_build=0
-aampbr_build=0
-aamp_build=0
+aampbr_build=1
+aamp_build=1
 breakpadchrome_build=0
 cjson_build=0
 curl_build=0
@@ -53,7 +53,7 @@ jpeg9a_build=0
 libdash_build=0
 libffi_build=0
 libjpegturbo_build=0
-libnode_build=1
+libnode_build=0
 libpng_build=0
 libxml2_build=0
 nanosvg_build=0
@@ -61,7 +61,7 @@ openssl_build=0
 orc_build=0
 osspuuid_build=0
 pcre_build=0
-sparkwebgl_build=1
+sparkwebgl_build=0
 sqliteautoconf_build=0
 #this may not be needed
 uwebsockets_build=0
@@ -109,6 +109,7 @@ aamp_depends=("aamp" "libdash" "cjson" "openssl" "gstreamer" "libxml2")
 
 prepare_modified_component_list()
 {
+  git show --pretty="format:" --name-only HEAD
   gitoutput=`git show --pretty="format:" --name-only HEAD`
   SAVEIFS=$IFS   # Save current IFS
   IFS=$'\n'      # Change IFS to new line
@@ -925,6 +926,9 @@ fi
 if [ $aamp_build -eq 1 ]; then
   banner "aamp"
 
+  if [ "$(uname)" = "Linux" ]; then
+    git apply aamp_linux_compile.patch
+  fi
   ./aamp/build.sh
 fi
 
