@@ -926,6 +926,9 @@ fi
 if [ $aamp_build -eq 1 ]; then
   banner "aamp"
 
+  if [ "$(uname)" = "Linux" ]; then
+    git apply aamp_linux_compile.patch
+  fi
   ./aamp/build.sh
 fi
 
