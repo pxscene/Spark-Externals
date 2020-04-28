@@ -294,7 +294,7 @@ prepare_dependent_component_list()
 {
   need_component_rebuild "${openssl_depends[@]}"
   need_component_rebuild "${libpng_depends[@]}"
-  need_component_rebuild "${libwebp_build[@]}"
+  need_component_rebuild "${libwebp_depends[@]}"
   need_component_rebuild "${jpeg9a_depends[@]}"
   need_component_rebuild "${pcre_depends[@]}"
   need_component_rebuild "${icu_depends[@]}"
@@ -432,6 +432,7 @@ if [ $libwebp_build -eq 1 ]; then
   banner "WebP"
 
   cd webP
+  chmod 777 build.sh
   ./build.sh
   cd ..
 
