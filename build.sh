@@ -28,7 +28,7 @@ NODE_MODULES_PATH=${EXT_INSTALL_PATH}/node_modules
 modified_component_list=()
 
 #build flags
-artifacts_build=1
+artifacts_build=0
 aampbr_build=0
 aamp_build=0
 breakpadchrome_build=0
