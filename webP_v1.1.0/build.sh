@@ -1,3 +1,4 @@
+
 mkdir build
 cd build
 cmake ..
@@ -18,3 +19,8 @@ cmake ..
 #       -DWEBP_NEAR_LOSSLESS=OFF ..
 
 make
+
+EXT_INSTALL_PATH=$PWD/../../artifacts${TRAVIS_OS_NAME}
+
+cp libwebp.a $EXT_INSTALL_PATH/osx
+cp libwebp.a $EXT_INSTALL_PATH/linux
