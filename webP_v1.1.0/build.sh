@@ -20,6 +20,11 @@ cmake ..
 
 make
 
-EXT_INSTALL_PATH=$PWD/../../artifacts${TRAVIS_OS_NAME}
+EXT_INSTALL_PATH=$PWD/../../artifacts/${TRAVIS_OS_NAME}
 
-cp libwebp.a $EXT_INSTALL_PATH
+# library
+
+cp libwebp.a $EXT_INSTALL_PATH/lib
+
+# includes
+cp -R ../src/webp $EXT_INSTALL_PATH/include/
