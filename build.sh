@@ -29,8 +29,8 @@ modified_component_list=()
 
 #build flags
 artifacts_build=0
-aampbr_build=1
-aamp_build=1
+aampbr_build=0
+aamp_build=0
 breakpadchrome_build=0
 cjson_build=0
 curl_build=0
@@ -55,6 +55,7 @@ libffi_build=0
 libjpegturbo_build=0
 libnode_build=0
 libpng_build=0
+libwebp_build=1
 libxml2_build=0
 nanosvg_build=0
 openssl_build=0
@@ -71,6 +72,7 @@ zlib_build=0
 #depends information
 openssl_depends=("openssl")
 libpng_depends=("libpng")
+libwebp_depends=["libwebp_build"]
 jpeg9a_depends=("jpeg9a")
 pcre_depends=("pcre")
 icu_depends=("icu")
@@ -115,7 +117,7 @@ prepare_modified_component_list()
   IFS=$'\n'      # Change IFS to new line
   changedfiles=($gitoutput) # split to array $names
   IFS=$SAVEIFS   # Restore IFS
-  
+
   lastcomponent=""
   for (( i=0; i<${#changedfiles[@]}; i++ ))
   do
@@ -190,6 +192,9 @@ enable_build_flags()
         libpng-1.6.28)
                 libpng_build=1
         	;;
+        webP_v1.1.0)
+                libwebp_build=1
+          ;;
         uWebSockets-0.14.8)
                 uwebsockets_build=1
         	;;
@@ -289,6 +294,7 @@ prepare_dependent_component_list()
 {
   need_component_rebuild "${openssl_depends[@]}"
   need_component_rebuild "${libpng_depends[@]}"
+  need_component_rebuild "${libwebp_depends[@]}"
   need_component_rebuild "${jpeg9a_depends[@]}"
   need_component_rebuild "${pcre_depends[@]}"
   need_component_rebuild "${icu_depends[@]}"
@@ -380,7 +386,9 @@ fi
 export LD_LIBRARY_PATH="${EXT_INSTALL_PATH}/:$LD_LIBRARY_PATH"
 export DYLD_LIBRARY_PATH="${EXT_INSTALL_PATH}/:$DYLD_LIBRARY_PATH"
 export PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH
+
 #--------- OPENSSL
+#
 if [ $openssl_build -eq 1 ]; then
   export CCACHE_DISABLE=true
   cd ${OPENSSL_DIR}
@@ -402,6 +410,8 @@ if [ $openssl_build -eq 1 ]; then
   ln -s ${OPENSSL_DIR} openssl
 fi
 
+#--------- PNG
+#
 if [ $libpng_build -eq 1 ]; then
 
   banner "PNG"
@@ -414,7 +424,19 @@ if [ $libpng_build -eq 1 ]; then
   cd ..
 
 fi
-#---------
+
+#--------- WebP
+#
+if [ $libwebp_build -eq 1 ]; then
+
+  banner "WebP"
+
+  cd webP
+  chmod 777 build.sh
+  ./build.sh
+  cd ..
+
+fi
 
 #--------- JPG
 #
@@ -430,75 +452,66 @@ if [ $jpeg9a_build -eq 1 ]; then
 
 fi
 
-#--------graphite2
+#-------- GRAPHITE2
+#
 if [ $graphite2_build -eq 1 ]; then
-  banner "graphite2"
+  banner "GRAPHITE2"
 
   ./graphite2/build.sh
 fi
 
-#--------
-
-#-------- pcre
+#-------- PCRE
+#
 if [ $pcre_build -eq 1 ]; then
-  banner "pcre"
+  banner "PCRE"
 
   ./pcre/build.sh
 fi
 
-#--------
-
 #--------icu
-
+#
 if [ $icu_build -eq 1 ]; then
   banner "icu"
 
   ./icu/build.sh
 fi
 
-#--------
-
 #-------- libffi
-
+#
 if [ $libffi_build -eq 1 ]; then
   banner "libffi"
 
   ./libffi/build.sh
 fi
 
-#--------
-
 #--------gettext
-
+#
 if [ $gettext_build -eq 1 ]; then
   banner "gettext"
 
   ./gettext/build.sh
 fi
 
-#--------
-
 #--------glib
-
+#
 if [ $glib_build -eq 1 ]; then
   banner "glib"
 
   ./glib/build.sh
 fi
 
-#--------
 ##--------- GIF
 #
 if [ $giflib_build -eq 1 ]; then
   banner "GIF"
-  
+
   cd giflib-5.1.9
   if [ "$(uname)" == "Darwin" ]; then
-  
+
   [ -d patches ] || mkdir -p patches
   [ -d patches/series ] || echo 'giflib-5.1.9.patch' >patches/series
   cp ../giflib-5.1.9.patch patches/
-  
+
   if [[ "$#" -eq "1" && "$1" == "--clean" ]]; then
   	quilt pop -afq || test $? = 2
   	rm -rf .libs/*
@@ -509,9 +522,9 @@ if [ $giflib_build -eq 1 ]; then
   else
   	quilt push -aq || test $? = 2
   fi
-  
+
   fi
-  
+
   if [ ! -e ./.libs/libgif.7.dylib ] ||
   [ "$(uname)" != "Darwin" ]
   then
@@ -521,8 +534,8 @@ if [ $giflib_build -eq 1 ]; then
   then
       cp libgif.7.dylib .libs/libgif.7.dylib
       cp libutil.7.dylib .libs/libutil.7.dylib
-  
-  
+
+
   elif [ -e libgif.so ]
   then
       cp libgif.so .libs/libgif.so
@@ -531,7 +544,7 @@ if [ $giflib_build -eq 1 ]; then
   fi
 
   cp -f gif_lib.h ${EXT_INSTALL_INCLUDE_PATH}/.
-  
+
   cd ..
   if [ "$(uname)" != "Darwin" ]
   then
@@ -544,7 +557,7 @@ if [ $giflib_build -eq 1 ]; then
 fi
 
 #--------- FT
-
+#
 if [ $freetype_build -eq 1 ]; then
   banner "FT"
 
@@ -556,26 +569,25 @@ if [ $freetype_build -eq 1 ]; then
   cd ..
 
 fi
-#---------
 
+#--------- FONT CONFIG
+#
 if [ $fontconfig_build -eq 1 ]; then
-  banner "Fontconfig"
+  banner "FONTCONFIG"
 
   PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./fontconfig/build.sh
 fi
 
-#--------
-
-#--------harfbuzz
-
+#--------HARFBUZZ
+#
 if [ $harfbuzz_build -eq 1 ]; then
-  banner "harfbuzz"
+  banner "HARFBUZZ"
 
   ./harfbuzz/build.sh
 fi
 
-#-------- openssl
-
+#-------- OPENSSL
+#
 if [ $openssl_build -eq 1 ]; then
   banner "openssl"
 
@@ -583,7 +595,7 @@ if [ $openssl_build -eq 1 ]; then
 fi
 
 #--------- CURL
-
+#
 if [ $curl_build -eq 1 ]; then
 
   banner "CURL"
@@ -597,16 +609,14 @@ if [ $curl_build -eq 1 ]; then
     sed -i '' '/#define HAVE_CLOCK_GETTIME_MONOTONIC 1/d' lib/curl_config.h
   fi
 
-  
   make all "-j${make_parallel}"
   make install
   cd ..
 
 fi
-#---------
 
 #--------- ZLIB
-
+#
 if [ $zlib_build -eq 1 ]; then
 
   banner "ZLIB"
@@ -618,16 +628,15 @@ if [ $zlib_build -eq 1 ]; then
   cd ..
 
 fi
-#---------
 
 #--------- LIBJPEG TURBO (Non -macOS)
 
 if [ "$(uname)" != "Darwin" ]
 then
   if [ $libjpegturbo_build -eq 1 ]; then
-  
+
     banner "TURBO"
-  
+
     cd libjpeg-turbo
     git update-index --assume-unchanged Makefile.in
     git update-index --assume-unchanged aclocal.m4
@@ -644,19 +653,18 @@ then
     git update-index --assume-unchanged md5/Makefile.in
     git update-index --assume-unchanged missing
     git update-index --assume-unchanged simd/Makefile.in
-  
+
     autoreconf -f -i
     ./configure --prefix=$EXT_INSTALL_PATH
     make "-j${make_parallel}"
     make install
     cd ..
-  
+
   fi
 fi
-#--------
 
 #--------- LIBNODE
-
+#
 if [ $libnode_build -eq 1 ]; then
   banner "NODE"
   if [ -e "${EXT_INSTALL_PATH}/include/unicode" ]
@@ -712,7 +720,8 @@ if [ $libnode_build -eq 1 ]; then
     cp -R ${NODE_LIB_DIR}/../node ${EXT_INSTALL_LIB_PATH}/.
   fi
 fi
-##---------
+
+##---------  BREAKPAD
 #
 if [ "$(uname)" != "Darwin" ]
 then
@@ -724,10 +733,10 @@ then
     find ${EXT_INSTALL_INCLUDE_PATH}/breakpad/ -type f ! -name "*.h" -exec rm -rf {} \;
   fi
 fi
-#---------
 
-if [ $nanosvg_build -eq 1 ]; then
 #-------- NANOSVG
+#
+if [ $nanosvg_build -eq 1 ]; then
 
   banner "NANOSVG"
 
@@ -735,10 +744,9 @@ if [ $nanosvg_build -eq 1 ]; then
   mkdir -p ${EXT_INSTALL_INCLUDE_PATH}/nanosvg
   cp ${NANOSVG_DIR}/src/nanosvgrast.h ${EXT_INSTALL_INCLUDE_PATH}/nanosvg/.
 fi
-#---------
 
 #-------- DUKTAPE
-
+#
 if [ $dukluv_build -eq 1 ]; then
   banner "DUCKTAPE"
 
@@ -746,7 +754,8 @@ if [ $dukluv_build -eq 1 ]; then
   cp -R ${DUKTAPE_LIB_DIR}/*.a ${EXT_INSTALL_LIB_PATH}/.
 fi
 
-#-------- spark-webgl
+#-------- SPARK-WEBGL
+#
 if [ $sparkwebgl_build -eq 1 ]; then
   export NODE_PATH=$NODE_PATH:`pwd`/../node_modules
   export PATH=`pwd`/node/deps/npm/bin/node-gyp-bin/:`pwd`/node/out/Release:$PATH
@@ -757,6 +766,7 @@ if [ $sparkwebgl_build -eq 1 ]; then
 fi
 
 #--------- uWebSockets
+#
 if [ $uwebsockets_build -eq 1 ]; then
 
   banner "uWEBSOCKETS"
@@ -773,6 +783,8 @@ if [ $uwebsockets_build -eq 1 ]; then
 
 fi
 
+#--------- SQL LITE
+#
 if [ $sqliteautoconf_build -eq 1 ]; then
   banner "SQLITE"
 
@@ -795,134 +807,111 @@ if [ $sqliteautoconf_build -eq 1 ]; then
 fi
 
 #-------- cJSON
-
+#
 if [ $cjson_build -eq 1 ]; then
   banner "cJSON"
 
   ./cJSON/build.sh
 fi
 
-#--------
-
-#--------orc
-
+#-------- ORC
+#
 if [ $orc_build -eq 1 ]; then
   banner "orc"
 
   ./orc/build.sh
 fi
 
-#--------
-
-
-#--------ossp-uuid
-
+#-------- OSSP-UUID
+#
 if [ $osspuuid_build -eq 1 ]; then
   banner "ossp-uuid"
 
   ./ossp-uuid/build.sh
 fi
 
-#--------
-
-#--------libxml2
-
+#-------- LIBXML2
+#
 if [ $libxml2_build -eq 1 ]; then
   banner "libxml2"
 
   ./libxml2/build.sh
 fi
 
-#--------
-
-#-------- libdash
-
+#-------- LIBDASH
+#
 if [ $libdash_build -eq 1 ]; then
   banner "libdash"
 
   LD_LIBRARY_PATH="$EXT_INSTALL_PATH/lib:$LD_LIBRARY_PATH" PKG_CONFIG_PATH=$EXT_INSTALL_PATH/lib/pkgconfig:$PKG_CONFIG_PATH ./libdash/libdash/build.sh
 fi
 
-#--------
-
-#-------- xz-5.2.2
-
+#-------- XZ
+#
 if [ $xz_build -eq 1 ]; then
   banner "xz"
 
   ./xz/build.sh
 fi
 
-#--------
-
-#-------- gstreamer-1.16
-
+#-------- GSTREAMER
+#
 if [ $gstreamer_build -eq 1 ]; then
   banner "gstreamer-1.16"
 
   ./gstreamer/build.sh
 fi
 
-#--------
-
-#-------- gst-plugin-base
-
+#-------- GST-PLUGIN-BASE
+#
 if [ $gstpluginsbase_build -eq 1 ]; then
   banner "gst-plugins-base"
 
   ./gst-plugins-base/build.sh
 fi
 
-#--------
-#-------- gst-plugin-bad
-
+#-------- GST-PLUGIN-BAD
+#
 if [ $gstpluginsbad_build -eq 1 ]; then
   banner "gst-plugins-bad"
 
   ./gst-plugins-bad/build.sh
 fi
 
-#--------
-#-------- gst-plugin-ugly
-
+#-------- GST-PLUGIN-UGLY
+#
 if [ $gstpluginsugly_build -eq 1 ]; then
   banner "gst-plugins-ugly"
 
   ./gst-plugins-ugly/build.sh
 fi
 
-#--------
-#-------- gst-plugin-good
-
+#-------- GST-PLUGIN-GOOD
+#
 if [ $gstpluginsgood_build -eq 1 ]; then
   banner "gst-plugins-good"
 
   ./gst-plugins-good/build.sh
 fi
 
-#--------
-#-------- gst-libav
-
+#-------- GST-LIBAV
+#
 if [ $gstlibav_build -eq 1 ]; then
   banner "gst-libav"
 
   ./gst-libav/build.sh
 fi
 
-#--------
-
-#-------- aampabr
-
+#-------- AAMPBR
+#
 if [ $aampbr_build -eq 1 ]; then
   banner "aampabr"
 
   ./aampabr/build.sh
 fi
 
-#--------
-
-#-------- aamp
-
+#-------- AAMP
+#
 if [ $aamp_build -eq 1 ]; then
   banner "aamp"
 
@@ -933,5 +922,10 @@ if [ $aamp_build -eq 1 ]; then
 fi
 
 #--------
+
+#--------------------------------------------
+banner ">>>>>  BUILD COMPLETE  <<<<<"
+#--------------------------------------------
+
 rm -rf extlibs
 unset CCACHE_DISABLE
