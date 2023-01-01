@@ -13,7 +13,7 @@
     "remark": "^10.0.0",
     "remark-lint": "^6.0.3",
     "remark-preset-lint-node": "^1.2.0",
-    "unified-args": "^6.0.0",
+    "unified-args": "^10.0.0",
     "unified-engine": "^5.1.0"
   },
   "scripts": {
